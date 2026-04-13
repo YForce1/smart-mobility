@@ -411,7 +411,7 @@ const Empty = ({icon,text}) => (
 // ── AUTH PAGE ──────────────────────────────────────────────────
 function AuthPage({onLogin}) {
   const [step,setStep]=useState("login");
-  const [email,setEmail]=useState("y.benali@axa.com");
+  const [email,setEmail]=useState("yassir.qaissi@axa.com");
   const [role,setRole]=useState("admin");
   const [loading,setLoading]=useState(false);
   const [code,setCode]=useState(["","","","","",""]);
@@ -421,8 +421,8 @@ function AuthPage({onLogin}) {
     setLoading(true);
     const userMap = {
       admin:    { id:"u0", name:"QAISSI Yassir",   email, role:"admin",   department:"Technology", is_manager:true, team:["e01","e02","e03","e04","e05","e06"] },
-      hr:       { id:"u1", name:"SLIMANI Hakim",    email:"h.slimani@axa.com",  role:"hr",      department:"HR",         employee_id:"mgr2" },
-      manager:  { id:"u2", name:"BOURON Charley",   email:"c.bouron@axa.com",   role:"manager", department:"Technology",  employee_id:"mgr1", is_manager:true, team:["e11","e12","e13","e14","e15","e16"] },
+      hr:       { id:"u1", name:"SLIMANI Hakim",    email:"hakim.slimani@axa.com",  role:"hr",      department:"HR",         employee_id:"mgr2" },
+      manager:  { id:"u2", name:"BOURON Charley",   email:"charley.bouron@axa.com",   role:"manager", department:"Technology",  employee_id:"mgr1", is_manager:true, team:["e11","e12","e13","e14","e15","e16"] },
       employee: { id:"u3", name:"SLUITER John",     email:"j.sluiter@axa.com",  role:"employee",department:"Technology",  employee_id:"e16" },
 };
     setTimeout(()=>onLogin(userMap[role]||userMap.admin),600);
