@@ -39,267 +39,269 @@ const POOL_META = {
 // ── Seed Data ──────────────────────────────────────────────────
 const SEED = {
   employees: [
+
     // ── TOP MANAGEMENT ────────────────────────────────────────
-    {id:"m0", name:"CAILLAT Matthieu",    email:"m.caillat@axa.com",      department:"Technology",  role:"Chief Technology & AI Officer",         manager:null, hire_date:"2010-01-01",type:"human",status:"active",pools:["Future Leader"],mobility_open:false,is_manager:true},
-    {id:"m1", name:"D ANIELLO Giovanni",  email:"g.daniello@axa.com",      department:"Technology",  role:"Group Chief Information Officer",       manager:"m0", hire_date:"2012-03-01",type:"human",status:"active",pools:["Future Leader"],mobility_open:false,is_manager:true},
-    {id:"m2", name:"BENMUSSA Achille",    email:"a.benmussa@axa.com",      department:"Technology",  role:"Head of Group Technology Office",       manager:"m1", hire_date:"2014-06-01",type:"human",status:"active",pools:["Future Leader"],mobility_open:false,is_manager:true},
-    {id:"m3", name:"REFFAY Cyrille",      email:"c.reffay@axa.com",        department:"HR",          role:"HR Comm & Compliance Product Lines Exec",manager:"m0",hire_date:"2013-09-01",type:"human",status:"active",pools:["Future Leader"],mobility_open:false,is_manager:true},
+    {id:"m0", name:"Martin LEFEVRE",      email:"m.lefevre@axa-go.com",      department:"Technology", role:"Chief Technology & AI Officer",           manager:null,  hire_date:"2010-01-01", type:"human", status:"active", pools:["Future Leader"],                    mobility_open:false, is_manager:true},
+    {id:"m1", name:"Giovanni FERRARA",    email:"g.ferrara@axa-go.com",       department:"Technology", role:"Group Chief Information Officer",         manager:"m0",  hire_date:"2012-03-01", type:"human", status:"active", pools:["Future Leader"],                    mobility_open:false, is_manager:true},
+    {id:"m2", name:"Achille MOREAU",      email:"a.moreau@axa-go.com",        department:"Technology", role:"Head of Group Technology Office",         manager:"m1",  hire_date:"2014-06-01", type:"human", status:"active", pools:["Future Leader"],                    mobility_open:false, is_manager:true},
+    {id:"m3", name:"Cyrille FONTAINE",    email:"c.fontaine@axa-go.com",      department:"HR",         role:"HR & Compliance Product Lines Executive", manager:"m0",  hire_date:"2013-09-01", type:"human", status:"active", pools:["Future Leader"],                    mobility_open:false, is_manager:true},
 
-    // ── ADMIN — YASSIR QAISSI ─────────────────────────────────
-    {id:"admin1",name:"QAISSI Yassir",    email:"y.qaissi@axa.com",        department:"Technology",  role:"Architecture Lead",                     manager:"m2", hire_date:"2019-03-01",type:"human",status:"active",pools:["High Performer","Future Leader"],mobility_open:false,is_manager:true},
+    // ── ADMIN ─────────────────────────────────────────────────
+    {id:"admin1", name:"Alexandre DUPONT", email:"a.dupont@axa-go.com",       department:"Technology", role:"Architecture Lead",                       manager:"m2",  hire_date:"2019-03-01", type:"human", status:"active", pools:["High Performer","Future Leader"],   mobility_open:false, is_manager:true},
 
-    // ── YASSIR'S TEAM (6 people) ──────────────────────────────
-    {id:"e01", name:"GODIN Neo",          email:"n.godin@axa.com",          department:"Technology",  role:"SDLC and MLOps Architect",              manager:"admin1",hire_date:"2020-06-01",type:"human",status:"active",pools:["Techie","AI Champion"],mobility_open:false},
-    {id:"e02", name:"KASSAOUI Abbes",     email:"a.kassaoui@axa.com",       department:"Technology",  role:"Cloud and Solution Architect",          manager:"admin1",hire_date:"2019-09-01",type:"human",status:"active",pools:["Techie"],mobility_open:false},
-    {id:"e03", name:"EL GHAYATI Jawad",   email:"j.elghayati@axa.com",      department:"Technology",  role:"Cloud and Solution Architect",          manager:"admin1",hire_date:"2021-01-01",type:"human",status:"active",pools:["Techie"],mobility_open:true},
-    {id:"e04", name:"NOGUERA ALAMINOS Alejandro",email:"a.noguera@axa.com", department:"Technology",  role:"Solution Architect",                    manager:"admin1",hire_date:"2020-03-01",type:"human",status:"active",pools:["Innovation"],mobility_open:false},
-    {id:"e05", name:"AGUERE Sebastien",   email:"s.aguere@axa.com",         department:"Technology",  role:"Data and Solution Architect",           manager:"admin1",hire_date:"2018-11-01",type:"human",status:"active",pools:["Techie","High Performer"],mobility_open:true},
-    {id:"e06", name:"OUTTRABADY Richard", email:"r.outtrabady@axa.com",     department:"Technology",  role:"Lead Cloud SDLC & Security Architect",  manager:"admin1",hire_date:"2017-05-01",type:"human",status:"active",pools:["High Performer","Techie"],mobility_open:false},
+    // ── ADMIN TEAM (6) ────────────────────────────────────────
+    {id:"e01", name:"Lucas BERNARD",      email:"l.bernard@axa-go.com",       department:"Technology", role:"SDLC and MLOps Architect",                manager:"admin1", hire_date:"2020-06-01", type:"human", status:"active", pools:["Techie","AI Champion"],       mobility_open:false},
+    {id:"e02", name:"Thomas ROUSSEAU",    email:"t.rousseau@axa-go.com",      department:"Technology", role:"Cloud and Solution Architect",            manager:"admin1", hire_date:"2019-09-01", type:"human", status:"active", pools:["Techie"],                     mobility_open:false},
+    {id:"e03", name:"Hugo MARTIN",        email:"h.martin@axa-go.com",        department:"Technology", role:"Cloud and Solution Architect",            manager:"admin1", hire_date:"2021-01-01", type:"human", status:"active", pools:["Techie"],                     mobility_open:true},
+    {id:"e04", name:"Maxime PETIT",       email:"m.petit@axa-go.com",         department:"Technology", role:"Solution Architect",                      manager:"admin1", hire_date:"2020-03-01", type:"human", status:"active", pools:["Innovation"],                 mobility_open:false},
+    {id:"e05", name:"Julien GARCIA",      email:"j.garcia@axa-go.com",        department:"Technology", role:"Data and Solution Architect",             manager:"admin1", hire_date:"2018-11-01", type:"human", status:"active", pools:["Techie","High Performer"],    mobility_open:true},
+    {id:"e06", name:"Nicolas LAMBERT",    email:"n.lambert@axa-go.com",       department:"Technology", role:"Lead Cloud SDLC & Security Architect",    manager:"admin1", hire_date:"2017-05-01", type:"human", status:"active", pools:["High Performer","Techie"],   mobility_open:false},
 
-    // ── MANAGER 1 — BOURON Charley ────────────────────────────
-    {id:"mgr1",name:"BOURON Charley",     email:"c.bouron@axa.com",         department:"Technology",  role:"Network & Cybersecurity Architecture Executive Manager",manager:"m2",hire_date:"2015-04-01",type:"human",status:"active",pools:["High Performer","Future Leader"],mobility_open:false,is_manager:true},
+    // ── MANAGER 1 ─────────────────────────────────────────────
+    {id:"mgr1", name:"Charley SIMON",     email:"c.simon@axa-go.com",         department:"Technology", role:"Network & Cybersecurity Architecture Executive Manager", manager:"m2", hire_date:"2015-04-01", type:"human", status:"active", pools:["High Performer","Future Leader"], mobility_open:false, is_manager:true},
 
-    // ── BOURON'S TEAM (6 people) ──────────────────────────────
-    {id:"e11", name:"SAUER Stephen",      email:"s.sauer@axa.com",          department:"Technology",  role:"Network Infrastructure Architect",      manager:"mgr1",hire_date:"2018-07-01",type:"human",status:"active",pools:["Techie"],mobility_open:false},
-    {id:"e12", name:"RAMAHEFASON David",  email:"d.ramahefason@axa.com",    department:"Technology",  role:"Network Infrastructure Architect",      manager:"mgr1",hire_date:"2019-02-01",type:"human",status:"active",pools:["Techie"],mobility_open:true},
-    {id:"e13", name:"EL MAHDI Houssem Eddine",email:"h.elmahdi@axa.com",   department:"Technology",  role:"Solution Network Architect",            manager:"mgr1",hire_date:"2020-10-01",type:"human",status:"active",pools:["Techie","Innovation"],mobility_open:false},
-    {id:"e14", name:"LEPERS Geoffrey",    email:"g.lepers@axa.com",         department:"Technology",  role:"Solution Network Architect",            manager:"mgr1",hire_date:"2021-03-01",type:"human",status:"active",pools:["Innovation"],mobility_open:true},
-    {id:"e15", name:"BARDET Arnaud",      email:"a.bardet@axa.com",         department:"Technology",  role:"Network Infrastructure Architect",      manager:"mgr1",hire_date:"2017-09-01",type:"human",status:"active",pools:["Techie"],mobility_open:false},
-    {id:"e16", name:"SLUITER John",       email:"j.sluiter@axa.com",        department:"Technology",  role:"Enterprise Architecture Expert",        manager:"mgr1",hire_date:"2016-01-01",type:"human",status:"active",pools:["High Performer","Future Leader"],mobility_open:false},
+    // ── MANAGER 1 TEAM (6) ────────────────────────────────────
+    {id:"e11", name:"Stephane BLANC",     email:"s.blanc@axa-go.com",         department:"Technology", role:"Network Infrastructure Architect",        manager:"mgr1", hire_date:"2018-07-01", type:"human", status:"active", pools:["Techie"],                     mobility_open:false},
+    {id:"e12", name:"David MORIN",        email:"d.morin@axa-go.com",         department:"Technology", role:"Network Infrastructure Architect",        manager:"mgr1", hire_date:"2019-02-01", type:"human", status:"active", pools:["Techie"],                     mobility_open:true},
+    {id:"e13", name:"Karim BENALI",       email:"k.benali@axa-go.com",        department:"Technology", role:"Solution Network Architect",              manager:"mgr1", hire_date:"2020-10-01", type:"human", status:"active", pools:["Techie","Innovation"],        mobility_open:false},
+    {id:"e14", name:"Florian RENARD",     email:"f.renard@axa-go.com",        department:"Technology", role:"Solution Network Architect",              manager:"mgr1", hire_date:"2021-03-01", type:"human", status:"active", pools:["Innovation"],                 mobility_open:true},
+    {id:"e15", name:"Antoine GIRARD",     email:"a.girard@axa-go.com",        department:"Technology", role:"Network Infrastructure Architect",        manager:"mgr1", hire_date:"2017-09-01", type:"human", status:"active", pools:["Techie"],                     mobility_open:false},
+    {id:"e16", name:"Pierre ROBERT",      email:"p.robert@axa-go.com",        department:"Technology", role:"Enterprise Architecture Expert",          manager:"mgr1", hire_date:"2016-01-01", type:"human", status:"active", pools:["High Performer","Future Leader"], mobility_open:false},
 
-    // ── MANAGER 2 — SLIMANI Hakim ─────────────────────────────
-    {id:"mgr2",name:"SLIMANI Hakim",      email:"h.slimani@axa.com",        department:"HR",          role:"HCM Product Executive Manager",         manager:"m3", hire_date:"2014-08-01",type:"human",status:"active",pools:["High Performer","Future Leader"],mobility_open:false,is_manager:true},
+    // ── MANAGER 2 ─────────────────────────────────────────────
+    {id:"mgr2", name:"Sophie LECLERC",    email:"s.leclerc@axa-go.com",       department:"HR",         role:"HCM Product Executive Manager",           manager:"m3",  hire_date:"2014-08-01", type:"human", status:"active", pools:["High Performer","Future Leader"], mobility_open:false, is_manager:true},
 
-    // ── SLIMANI'S TEAM (18 people) ────────────────────────────
-    {id:"e21", name:"CHU Joffrey",                email:"j.chu@axa.com",               department:"HR","role":"HCM Consultant",                    manager:"mgr2",hire_date:"2021-05-01",type:"human",status:"active",pools:[],mobility_open:false},
-    {id:"e22", name:"REZZOUG Zakaria",            email:"z.rezzoug@axa.com",           department:"HR",role:"HCM Consultant",                     manager:"mgr2",hire_date:"2022-01-01",type:"human",status:"active",pools:[],mobility_open:false},
-    {id:"e23", name:"RIBEIRO Marcelo",            email:"m.ribeiro@axa.com",           department:"HR",role:"HCM Consultant",                     manager:"mgr2",hire_date:"2021-09-01",type:"human",status:"active",pools:[],mobility_open:true},
-    {id:"e24", name:"DUBOIS Adam",                email:"a.dubois@axa.com",            department:"HR",role:"HCM Consultant",                     manager:"mgr2",hire_date:"2022-03-01",type:"human",status:"active",pools:[],mobility_open:false},
-    {id:"e25", name:"DALY Djah Elvis Junir",      email:"d.daly@axa.com",              department:"HR",role:"HCM Consultant",                     manager:"mgr2",hire_date:"2023-01-01",type:"human",status:"active",pools:[],mobility_open:false},
-    {id:"e26", name:"DEMETRIADES Marie",          email:"m.demetriades@axa.com",       department:"HR",role:"HCM Service Delivery Manager",       manager:"mgr2",hire_date:"2019-06-01",type:"human",status:"active",pools:["High Performer"],mobility_open:false},
-    {id:"e27", name:"NECULA Denisa",              email:"d.necula@axa.com",            department:"HR",role:"HCM Consultant",                     manager:"mgr2",hire_date:"2022-07-01",type:"human",status:"active",pools:[],mobility_open:false},
-    {id:"e28", name:"ARABADJIAN Ines",            email:"i.arabadjian@axa.com",        department:"HR",role:"HCM Global HR Product Owner",        manager:"mgr2",hire_date:"2018-04-01",type:"human",status:"active",pools:["High Performer","Innovation"],mobility_open:true},
-    {id:"e29", name:"GRONDIN Fabien",             email:"f.grondin@axa.com",           department:"HR",role:"HCM Consultant",                     manager:"mgr2",hire_date:"2021-11-01",type:"human",status:"active",pools:[],mobility_open:false},
-    {id:"e30", name:"SITAYEB Madjda",             email:"m.sitayeb@axa.com",           department:"HR",role:"HCM Consultant",                     manager:"mgr2",hire_date:"2022-05-01",type:"human",status:"active",pools:[],mobility_open:false},
-    {id:"e31", name:"NGUYEN Kimberly",            email:"k.nguyen@axa.com",            department:"HR",role:"Product Owner",                      manager:"mgr2",hire_date:"2020-02-01",type:"human",status:"active",pools:["Innovation","Mobilité+"],mobility_open:true},
-    {id:"e32", name:"GOPAL Anusha",               email:"a.gopal@axa.com",             department:"HR",role:"Business Analyst",                   manager:"mgr2",hire_date:"2021-08-01",type:"human",status:"active",pools:["Innovation"],mobility_open:false},
-    {id:"e33", name:"CUGNET Guillaume",           email:"g.cugnet@axa.com",            department:"HR",role:"HCM Integration Manager",            manager:"mgr2",hire_date:"2017-10-01",type:"human",status:"active",pools:["Techie","High Performer"],mobility_open:false},
-    {id:"e34", name:"LERAY Melanie",              email:"m.leray@axa.com",             department:"HR",role:"HCM Talent Attraction Product Owner", manager:"mgr2",hire_date:"2019-03-01",type:"human",status:"active",pools:["Innovation","Mobilité+"],mobility_open:true},
-    {id:"e35", name:"GEBHARD Alban",              email:"a.gebhard@axa.com",           department:"HR",role:"HCM Platform Engineer Expert",       manager:"mgr2",hire_date:"2018-01-01",type:"human",status:"active",pools:["Techie","High Performer"],mobility_open:false},
-    {id:"e36", name:"FAYE Babacar",               email:"b.faye@axa.com",              department:"HR",role:"HCM Consultant",                     manager:"mgr2",hire_date:"2022-09-01",type:"human",status:"active",pools:[],mobility_open:false},
-    {id:"e37", name:"AIZEL Dounia",               email:"d.aizel@axa.com",             department:"HR",role:"HCM Consultant",                     manager:"mgr2",hire_date:"2023-02-01",type:"human",status:"active",pools:[],mobility_open:false},
-    {id:"e38", name:"BENHILAL Naoufal",           email:"n.benhilal@axa.com",          department:"HR",role:"HCM Consultant",                     manager:"mgr2",hire_date:"2022-11-01",type:"human",status:"active",pools:[],mobility_open:false},
+    // ── MANAGER 2 TEAM (18) ───────────────────────────────────
+    {id:"e21", name:"Julien CARPENTIER",  email:"j.carpentier@axa-go.com",    department:"HR",         role:"HCM Consultant",                          manager:"mgr2", hire_date:"2021-05-01", type:"human", status:"active", pools:[],                             mobility_open:false},
+    {id:"e22", name:"Mehdi ZAOUI",        email:"m.zaoui@axa-go.com",         department:"HR",         role:"HCM Consultant",                          manager:"mgr2", hire_date:"2022-01-01", type:"human", status:"active", pools:[],                             mobility_open:false},
+    {id:"e23", name:"Bruno SANTOS",       email:"b.santos@axa-go.com",        department:"HR",         role:"HCM Consultant",                          manager:"mgr2", hire_date:"2021-09-01", type:"human", status:"active", pools:[],                             mobility_open:true},
+    {id:"e24", name:"Adrien CLEMENT",     email:"a.clement@axa-go.com",       department:"HR",         role:"HCM Consultant",                          manager:"mgr2", hire_date:"2022-03-01", type:"human", status:"active", pools:[],                             mobility_open:false},
+    {id:"e25", name:"Dylan FAURE",        email:"d.faure@axa-go.com",         department:"HR",         role:"HCM Consultant",                          manager:"mgr2", hire_date:"2023-01-01", type:"human", status:"active", pools:[],                             mobility_open:false},
+    {id:"e26", name:"Marie CHEVALIER",    email:"m.chevalier@axa-go.com",     department:"HR",         role:"HCM Service Delivery Manager",            manager:"mgr2", hire_date:"2019-06-01", type:"human", status:"active", pools:["High Performer"],             mobility_open:false},
+    {id:"e27", name:"Laura BONNET",       email:"l.bonnet@axa-go.com",        department:"HR",         role:"HCM Consultant",                          manager:"mgr2", hire_date:"2022-07-01", type:"human", status:"active", pools:[],                             mobility_open:false},
+    {id:"e28", name:"Camille PERRIN",     email:"c.perrin@axa-go.com",        department:"HR",         role:"HCM Global HR Product Owner",             manager:"mgr2", hire_date:"2018-04-01", type:"human", status:"active", pools:["High Performer","Innovation"], mobility_open:true},
+    {id:"e29", name:"Fabrice NGUYEN",     email:"f.nguyen@axa-go.com",        department:"HR",         role:"HCM Consultant",                          manager:"mgr2", hire_date:"2021-11-01", type:"human", status:"active", pools:[],                             mobility_open:false},
+    {id:"e30", name:"Sandra LOPEZ",       email:"s.lopez@axa-go.com",         department:"HR",         role:"HCM Consultant",                          manager:"mgr2", hire_date:"2022-05-01", type:"human", status:"active", pools:[],                             mobility_open:false},
+    {id:"e31", name:"Kim NGUYEN",         email:"k.nguyen@axa-go.com",        department:"HR",         role:"Product Owner",                           manager:"mgr2", hire_date:"2020-02-01", type:"human", status:"active", pools:["Innovation","Mobilité+"],      mobility_open:true},
+    {id:"e32", name:"Priya SHARMA",       email:"p.sharma@axa-go.com",        department:"HR",         role:"Business Analyst",                        manager:"mgr2", hire_date:"2021-08-01", type:"human", status:"active", pools:["Innovation"],                 mobility_open:false},
+    {id:"e33", name:"Guillaume MERCIER",  email:"g.mercier@axa-go.com",       department:"HR",         role:"HCM Integration Manager",                 manager:"mgr2", hire_date:"2017-10-01", type:"human", status:"active", pools:["Techie","High Performer"],    mobility_open:false},
+    {id:"e34", name:"Isabelle VIDAL",     email:"i.vidal@axa-go.com",         department:"HR",         role:"HCM Talent Attraction Product Owner",     manager:"mgr2", hire_date:"2019-03-01", type:"human", status:"active", pools:["Innovation","Mobilité+"],      mobility_open:true},
+    {id:"e35", name:"Alban ROUX",         email:"a.roux@axa-go.com",          department:"HR",         role:"HCM Platform Engineer Expert",            manager:"mgr2", hire_date:"2018-01-01", type:"human", status:"active", pools:["Techie","High Performer"],    mobility_open:false},
+    {id:"e36", name:"Omar DIALLO",        email:"o.diallo@axa-go.com",        department:"HR",         role:"HCM Consultant",                          manager:"mgr2", hire_date:"2022-09-01", type:"human", status:"active", pools:[],                             mobility_open:false},
+    {id:"e37", name:"Aline DUPUIS",       email:"a.dupuis@axa-go.com",        department:"HR",         role:"HCM Consultant",                          manager:"mgr2", hire_date:"2023-02-01", type:"human", status:"active", pools:[],                             mobility_open:false},
+    {id:"e38", name:"Nour MANSOURI",      email:"n.mansouri@axa-go.com",      department:"HR",         role:"HCM Consultant",                          manager:"mgr2", hire_date:"2022-11-01", type:"human", status:"active", pools:[],                             mobility_open:false},
 
     // ── AI AGENTS ─────────────────────────────────────────────
-    {id:"ai1",name:"ARIA-Matcher",        email:"aria@axa-ai.internal",    department:"Technology",  role:"AI Matching Agent",      manager:"admin1",hire_date:"2024-06-01",type:"ai_agent",status:"active",lifecycle:"deployed",model:"GPT-4o",      version:"2.1",accuracy:94.2,requests:847, pools:["AI Champion"]},
-    {id:"ai2",name:"SKIM-Analyzer",       email:"skim@axa-ai.internal",    department:"HR",          role:"Skills Intelligence",    manager:"mgr2",  hire_date:"2024-09-01",type:"ai_agent",status:"active",lifecycle:"deployed",model:"Claude-3.5",  version:"1.4",accuracy:91.8,requests:234, pools:["AI Champion"]},
-    {id:"ai3",name:"FLOW-Orchestrator",   email:"flow@axa-ai.internal",    department:"Technology",  role:"Workflow Orchestration", manager:"admin1",hire_date:"2025-01-15",type:"ai_agent",status:"training",lifecycle:"training",model:"Claude-3.5",version:"0.8",accuracy:78.3,requests:0,   pools:[]},
+    {id:"ai1", name:"ARIA-Matcher",       email:"aria@axa-ai.internal",       department:"Technology", role:"AI Matching Agent",      manager:"admin1", hire_date:"2024-06-01", type:"ai_agent", status:"active", lifecycle:"deployed",  model:"GPT-4o",      version:"2.1", accuracy:94.2, requests:847, pools:["AI Champion"]},
+    {id:"ai2", name:"SKIM-Analyzer",      email:"skim@axa-ai.internal",       department:"HR",         role:"Skills Intelligence",    manager:"mgr2",   hire_date:"2024-09-01", type:"ai_agent", status:"active", lifecycle:"deployed",  model:"Claude-3.5",  version:"1.4", accuracy:91.8, requests:234, pools:["AI Champion"]},
+    {id:"ai3", name:"FLOW-Orchestrator",  email:"flow@axa-ai.internal",       department:"Technology", role:"Workflow Orchestration", manager:"admin1", hire_date:"2025-01-15", type:"ai_agent", status:"training",lifecycle:"training", model:"Claude-3.5",  version:"0.8", accuracy:78.3, requests:0,   pools:[]},
   ],
 
-  employee_skills:[
-    // Yassir's team
-    {id:"es01",employee_id:"e01",skill_id:"sk05",current_level:4,target_level:5,validated:true},
-    {id:"es02",employee_id:"e01",skill_id:"sk06",current_level:3,target_level:5,validated:true},
-    {id:"es03",employee_id:"e02",skill_id:"sk03",current_level:5,target_level:5,validated:true},
-    {id:"es04",employee_id:"e02",skill_id:"sk01",current_level:3,target_level:4,validated:true},
-    {id:"es05",employee_id:"e03",skill_id:"sk03",current_level:4,target_level:5,validated:false},
-    {id:"es06",employee_id:"e04",skill_id:"sk18",current_level:3,target_level:4,validated:true},
-    {id:"es07",employee_id:"e05",skill_id:"sk02",current_level:4,target_level:5,validated:true},
-    {id:"es08",employee_id:"e05",skill_id:"sk04",current_level:4,target_level:4,validated:true},
-    {id:"es09",employee_id:"e06",skill_id:"sk03",current_level:5,target_level:5,validated:true},
-    {id:"es10",employee_id:"e06",skill_id:"sk16",current_level:4,target_level:5,validated:true},
-    // Bouron's team
-    {id:"es11",employee_id:"e11",skill_id:"sk03",current_level:3,target_level:4,validated:true},
-    {id:"es12",employee_id:"e12",skill_id:"sk03",current_level:4,target_level:5,validated:true},
-    {id:"es13",employee_id:"e13",skill_id:"sk18",current_level:3,target_level:5,validated:false},
-    {id:"es14",employee_id:"e14",skill_id:"sk18",current_level:2,target_level:4,validated:false},
-    {id:"es15",employee_id:"e15",skill_id:"sk03",current_level:4,target_level:4,validated:true},
-    {id:"es16",employee_id:"e16",skill_id:"sk18",current_level:5,target_level:5,validated:true},
-    {id:"es17",employee_id:"e16",skill_id:"sk16",current_level:4,target_level:5,validated:true},
-    // Slimani's team
-    {id:"es18",employee_id:"e28",skill_id:"sk12",current_level:4,target_level:5,validated:true},
-    {id:"es19",employee_id:"e31",skill_id:"sk17",current_level:3,target_level:4,validated:true},
-    {id:"es20",employee_id:"e33",skill_id:"sk01",current_level:3,target_level:4,validated:false},
-    {id:"es21",employee_id:"e34",skill_id:"sk14",current_level:4,target_level:5,validated:true},
-    {id:"es22",employee_id:"e35",skill_id:"sk03",current_level:4,target_level:5,validated:true},
-    {id:"es23",employee_id:"e26",skill_id:"sk12",current_level:3,target_level:4,validated:true},
+  employee_skills: [
+    // Admin team
+    {id:"es01", employee_id:"e01", skill_id:"sk05", current_level:4, target_level:5, validated:true},
+    {id:"es02", employee_id:"e01", skill_id:"sk06", current_level:3, target_level:5, validated:true},
+    {id:"es03", employee_id:"e02", skill_id:"sk03", current_level:5, target_level:5, validated:true},
+    {id:"es04", employee_id:"e02", skill_id:"sk01", current_level:3, target_level:4, validated:true},
+    {id:"es05", employee_id:"e03", skill_id:"sk03", current_level:4, target_level:5, validated:false},
+    {id:"es06", employee_id:"e04", skill_id:"sk18", current_level:3, target_level:4, validated:true},
+    {id:"es07", employee_id:"e05", skill_id:"sk02", current_level:4, target_level:5, validated:true},
+    {id:"es08", employee_id:"e05", skill_id:"sk04", current_level:4, target_level:4, validated:true},
+    {id:"es09", employee_id:"e06", skill_id:"sk03", current_level:5, target_level:5, validated:true},
+    {id:"es10", employee_id:"e06", skill_id:"sk16", current_level:4, target_level:5, validated:true},
+    // Manager 1 team
+    {id:"es11", employee_id:"e11", skill_id:"sk03", current_level:3, target_level:4, validated:true},
+    {id:"es12", employee_id:"e12", skill_id:"sk03", current_level:4, target_level:5, validated:true},
+    {id:"es13", employee_id:"e13", skill_id:"sk18", current_level:3, target_level:5, validated:false},
+    {id:"es14", employee_id:"e14", skill_id:"sk18", current_level:2, target_level:4, validated:false},
+    {id:"es15", employee_id:"e15", skill_id:"sk03", current_level:4, target_level:4, validated:true},
+    {id:"es16", employee_id:"e16", skill_id:"sk18", current_level:5, target_level:5, validated:true},
+    {id:"es17", employee_id:"e16", skill_id:"sk16", current_level:4, target_level:5, validated:true},
+    // Manager 2 team
+    {id:"es18", employee_id:"e28", skill_id:"sk12", current_level:4, target_level:5, validated:true},
+    {id:"es19", employee_id:"e31", skill_id:"sk17", current_level:3, target_level:4, validated:true},
+    {id:"es20", employee_id:"e33", skill_id:"sk01", current_level:3, target_level:4, validated:false},
+    {id:"es21", employee_id:"e34", skill_id:"sk14", current_level:4, target_level:5, validated:true},
+    {id:"es22", employee_id:"e35", skill_id:"sk03", current_level:4, target_level:5, validated:true},
+    {id:"es23", employee_id:"e26", skill_id:"sk12", current_level:3, target_level:4, validated:true},
     // AI agents
-    {id:"es24",employee_id:"ai1",skill_id:"sk19",current_level:5,target_level:5,validated:true},
-    {id:"es25",employee_id:"ai2",skill_id:"sk21",current_level:4,target_level:5,validated:true},
+    {id:"es24", employee_id:"ai1", skill_id:"sk19", current_level:5, target_level:5, validated:true},
+    {id:"es25", employee_id:"ai2", skill_id:"sk21", current_level:4, target_level:5, validated:true},
   ],
 
-  skills_ref:[
-    {id:"sk01",name:"JavaScript / TypeScript",  category:"Technical",   applicable_to:["human","ai_agent"]},
-    {id:"sk02",name:"Python",                   category:"Technical",   applicable_to:["human","ai_agent"]},
-    {id:"sk03",name:"Cloud Architecture",       category:"Technical",   applicable_to:["human","ai_agent"]},
-    {id:"sk04",name:"Data Engineering",         category:"Technical",   applicable_to:["human","ai_agent"]},
-    {id:"sk05",name:"DevOps / CI-CD / MLOps",   category:"Technical",   applicable_to:["human","ai_agent"]},
-    {id:"sk06",name:"Machine Learning",         category:"Technical",   applicable_to:["human","ai_agent"]},
-    {id:"sk07",name:"Network Architecture",     category:"Technical",   applicable_to:["human","ai_agent"]},
-    {id:"sk08",name:"Cybersecurity",            category:"Technical",   applicable_to:["human","ai_agent"]},
-    {id:"sk09",name:"HCM Systems",             category:"Domain",      applicable_to:["human"]},
-    {id:"sk10",name:"HR Product Management",   category:"Domain",      applicable_to:["human"]},
-    {id:"sk11",name:"Leadership & Influence",  category:"Soft Skills", applicable_to:["human"]},
-    {id:"sk12",name:"Change Management",       category:"Soft Skills", applicable_to:["human"]},
-    {id:"sk13",name:"Communication",           category:"Soft Skills", applicable_to:["human"]},
-    {id:"sk14",name:"Stakeholder Management",  category:"Soft Skills", applicable_to:["human"]},
-    {id:"sk15",name:"Coaching & Mentoring",    category:"Soft Skills", applicable_to:["human"]},
-    {id:"sk16",name:"Strategic Thinking",      category:"Strategic",   applicable_to:["human","ai_agent"]},
-    {id:"sk17",name:"Programme Management",    category:"Strategic",   applicable_to:["human","ai_agent"]},
-    {id:"sk18",name:"Enterprise Architecture", category:"Strategic",   applicable_to:["human","ai_agent"]},
-    {id:"sk19",name:"Talent Matching & Scoring",category:"AI Capability",applicable_to:["ai_agent"]},
-    {id:"sk21",name:"Skills Gap Analysis",     category:"AI Capability",applicable_to:["ai_agent"]},
-    {id:"sk22",name:"Workflow Orchestration",  category:"AI Capability",applicable_to:["ai_agent"]},
+  skills_ref: [
+    {id:"sk01", name:"JavaScript / TypeScript",   category:"Technical",     applicable_to:["human","ai_agent"]},
+    {id:"sk02", name:"Python",                    category:"Technical",     applicable_to:["human","ai_agent"]},
+    {id:"sk03", name:"Cloud Architecture",        category:"Technical",     applicable_to:["human","ai_agent"]},
+    {id:"sk04", name:"Data Engineering",          category:"Technical",     applicable_to:["human","ai_agent"]},
+    {id:"sk05", name:"DevOps / CI-CD / MLOps",    category:"Technical",     applicable_to:["human","ai_agent"]},
+    {id:"sk06", name:"Machine Learning",          category:"Technical",     applicable_to:["human","ai_agent"]},
+    {id:"sk07", name:"Network Architecture",      category:"Technical",     applicable_to:["human","ai_agent"]},
+    {id:"sk08", name:"Cybersecurity",             category:"Technical",     applicable_to:["human","ai_agent"]},
+    {id:"sk09", name:"HCM Systems",               category:"Domain",        applicable_to:["human"]},
+    {id:"sk10", name:"HR Product Management",     category:"Domain",        applicable_to:["human"]},
+    {id:"sk11", name:"Leadership & Influence",    category:"Soft Skills",   applicable_to:["human"]},
+    {id:"sk12", name:"Change Management",         category:"Soft Skills",   applicable_to:["human"]},
+    {id:"sk13", name:"Communication",             category:"Soft Skills",   applicable_to:["human"]},
+    {id:"sk14", name:"Stakeholder Management",    category:"Soft Skills",   applicable_to:["human"]},
+    {id:"sk15", name:"Coaching & Mentoring",      category:"Soft Skills",   applicable_to:["human"]},
+    {id:"sk16", name:"Strategic Thinking",        category:"Strategic",     applicable_to:["human","ai_agent"]},
+    {id:"sk17", name:"Programme Management",      category:"Strategic",     applicable_to:["human","ai_agent"]},
+    {id:"sk18", name:"Enterprise Architecture",   category:"Strategic",     applicable_to:["human","ai_agent"]},
+    {id:"sk19", name:"Talent Matching & Scoring", category:"AI Capability", applicable_to:["ai_agent"]},
+    {id:"sk21", name:"Skills Gap Analysis",       category:"AI Capability", applicable_to:["ai_agent"]},
+    {id:"sk22", name:"Workflow Orchestration",    category:"AI Capability", applicable_to:["ai_agent"]},
   ],
 
-  learning_catalog:[
-    {id:"lc01",title:"AWS Solutions Architect",             provider:"AWS Training",             type:"Certification",duration:"40h",url:"https://aws.amazon.com/training/",                                    skill_ids:["sk03"],       level:"Advanced",    cost:"AXA-funded"},
-    {id:"lc02",title:"MLOps Engineering",                   provider:"Coursera / DeepLearning.AI",type:"MOOC",       duration:"30h",url:"https://www.coursera.org/specializations/machine-learning-engineering-for-production-mlops",skill_ids:["sk05","sk06"],level:"Advanced",    cost:"AXA-funded"},
-    {id:"lc03",title:"Network Architecture Fundamentals",   provider:"Cisco Learning",           type:"Course",     duration:"20h",url:"https://learningnetwork.cisco.com",                                    skill_ids:["sk07"],       level:"Intermediate",cost:"AXA-funded"},
-    {id:"lc04",title:"Cybersecurity Architecture",          provider:"SANS Institute",           type:"Certification",duration:"40h",url:"https://www.sans.org",                                              skill_ids:["sk08","sk07"],level:"Advanced",    cost:"External — budget approval"},
-    {id:"lc05",title:"HCM Product Management",              provider:"LinkedIn Learning",        type:"Course",     duration:"12h",url:"https://linkedin.com/learning",                                       skill_ids:["sk10","sk09"],level:"Intermediate",cost:"AXA-funded"},
-    {id:"lc06",title:"Enterprise Architecture (TOGAF)",     provider:"Open Group",               type:"Certification",duration:"60h",url:"https://opengroup.org/togaf",                                      skill_ids:["sk18","sk16"],level:"Advanced",    cost:"External — budget approval"},
-    {id:"lc07",title:"Programme Management (MSP)",          provider:"AXELOS",                   type:"Certification",duration:"35h",url:"https://axelos.com",                                               skill_ids:["sk17"],       level:"Advanced",    cost:"External — budget approval"},
-    {id:"lc08",title:"Data Engineering with Python",        provider:"DataCamp",                 type:"MOOC",       duration:"20h",url:"https://datacamp.com",                                               skill_ids:["sk04","sk02"],level:"Intermediate",cost:"AXA-funded"},
-    {id:"lc09",title:"Leadership Essentials",               provider:"LinkedIn Learning",        type:"Course",     duration:"8h", url:"https://linkedin.com/learning",                                       skill_ids:["sk11","sk15"],level:"Beginner",    cost:"AXA-funded"},
-    {id:"lc10",title:"Stakeholder & Change Management",     provider:"APMG International",       type:"Certification",duration:"24h",url:"https://apmg-international.com",                                  skill_ids:["sk12","sk14"],level:"Advanced",    cost:"External — budget approval"},
-    {id:"lc11",title:"Strategic Thinking for Leaders",      provider:"HEC Paris Executive",      type:"Course",     duration:"16h",url:"https://executive.hec.edu",                                          skill_ids:["sk16","sk11"],level:"Advanced",    cost:"External — budget approval"},
-    {id:"lc12",title:"Cloud Security & DevSecOps",          provider:"Google Cloud Training",    type:"Certification",duration:"30h",url:"https://cloud.google.com/training",                               skill_ids:["sk03","sk08"],level:"Advanced",    cost:"AXA-funded"},
+  learning_catalog: [
+    {id:"lc01", title:"AWS Solutions Architect",            provider:"AWS Training",              type:"Certification", duration:"40h", url:"https://aws.amazon.com/training/",                                                                    skill_ids:["sk03"],        level:"Advanced",     cost:"AXA-funded"},
+    {id:"lc02", title:"MLOps Engineering",                  provider:"Coursera / DeepLearning.AI",type:"MOOC",          duration:"30h", url:"https://www.coursera.org/specializations/machine-learning-engineering-for-production-mlops",           skill_ids:["sk05","sk06"], level:"Advanced",     cost:"AXA-funded"},
+    {id:"lc03", title:"Network Architecture Fundamentals",  provider:"Cisco Learning",            type:"Course",        duration:"20h", url:"https://learningnetwork.cisco.com",                                                                   skill_ids:["sk07"],        level:"Intermediate", cost:"AXA-funded"},
+    {id:"lc04", title:"Cybersecurity Architecture",         provider:"SANS Institute",            type:"Certification", duration:"40h", url:"https://www.sans.org",                                                                                skill_ids:["sk08","sk07"], level:"Advanced",     cost:"External — budget approval"},
+    {id:"lc05", title:"HCM Product Management",             provider:"LinkedIn Learning",         type:"Course",        duration:"12h", url:"https://linkedin.com/learning",                                                                       skill_ids:["sk10","sk09"], level:"Intermediate", cost:"AXA-funded"},
+    {id:"lc06", title:"Enterprise Architecture (TOGAF)",    provider:"Open Group",                type:"Certification", duration:"60h", url:"https://opengroup.org/togaf",                                                                         skill_ids:["sk18","sk16"], level:"Advanced",     cost:"External — budget approval"},
+    {id:"lc07", title:"Programme Management (MSP)",         provider:"AXELOS",                    type:"Certification", duration:"35h", url:"https://axelos.com",                                                                                  skill_ids:["sk17"],        level:"Advanced",     cost:"External — budget approval"},
+    {id:"lc08", title:"Data Engineering with Python",       provider:"DataCamp",                  type:"MOOC",          duration:"20h", url:"https://datacamp.com",                                                                                skill_ids:["sk04","sk02"], level:"Intermediate", cost:"AXA-funded"},
+    {id:"lc09", title:"Leadership Essentials",              provider:"LinkedIn Learning",         type:"Course",        duration:"8h",  url:"https://linkedin.com/learning",                                                                       skill_ids:["sk11","sk15"], level:"Beginner",     cost:"AXA-funded"},
+    {id:"lc10", title:"Stakeholder & Change Management",    provider:"APMG International",        type:"Certification", duration:"24h", url:"https://apmg-international.com",                                                                      skill_ids:["sk12","sk14"], level:"Advanced",     cost:"External — budget approval"},
+    {id:"lc11", title:"Strategic Thinking for Leaders",     provider:"HEC Paris Executive",       type:"Course",        duration:"16h", url:"https://executive.hec.edu",                                                                           skill_ids:["sk16","sk11"], level:"Advanced",     cost:"External — budget approval"},
+    {id:"lc12", title:"Cloud Security & DevSecOps",         provider:"Google Cloud Training",     type:"Certification", duration:"30h", url:"https://cloud.google.com/training",                                                                   skill_ids:["sk03","sk08"], level:"Advanced",     cost:"AXA-funded"},
   ],
 
-  career_paths:[
-    {id:"cp01",title:"Architecture Leadership Track",department:"Technology",nodes:[
-      {id:"n1",role:"Solution Architect",       level:1},
-      {id:"n2",role:"Senior Solution Architect",level:2},
-      {id:"n3",role:"Principal Architect",      level:3},
-      {id:"n4a",role:"Architecture Manager",    level:4},
-      {id:"n4b",role:"Enterprise Architect",    level:4},
-      {id:"n5",role:"Architecture Executive",   level:5},
-    ],edges:[
-      {from:"n1", to:"n2",  timeline:"2Y",skills:["sk03","sk18"],        label:"Senior promotion"},
-      {from:"n2", to:"n3",  timeline:"3Y",skills:["sk16","sk18","sk11"], label:"Principal track"},
-      {from:"n3", to:"n4a", timeline:"2Y",skills:["sk11","sk17","sk15"], label:"Management fork"},
-      {from:"n3", to:"n4b", timeline:"3Y",skills:["sk18","sk16","sk08"], label:"Enterprise fork"},
-      {from:"n4a",to:"n5",  timeline:"4Y",skills:["sk16","sk17","sk11"], label:"Executive path"},
-      {from:"n4b",to:"n5",  timeline:"3Y",skills:["sk16","sk18","sk17"], label:"Executive path"},
+  career_paths: [
+    {id:"cp01", title:"Architecture Leadership Track", department:"Technology", nodes:[
+      {id:"n1",  role:"Solution Architect",        level:1},
+      {id:"n2",  role:"Senior Solution Architect", level:2},
+      {id:"n3",  role:"Principal Architect",       level:3},
+      {id:"n4a", role:"Architecture Manager",      level:4},
+      {id:"n4b", role:"Enterprise Architect",      level:4},
+      {id:"n5",  role:"Architecture Executive",    level:5},
+    ], edges:[
+      {from:"n1",  to:"n2",  timeline:"2Y", skills:["sk03","sk18"],         label:"Senior promotion"},
+      {from:"n2",  to:"n3",  timeline:"3Y", skills:["sk16","sk18","sk11"],  label:"Principal track"},
+      {from:"n3",  to:"n4a", timeline:"2Y", skills:["sk11","sk17","sk15"],  label:"Management fork"},
+      {from:"n3",  to:"n4b", timeline:"3Y", skills:["sk18","sk16","sk08"],  label:"Enterprise fork"},
+      {from:"n4a", to:"n5",  timeline:"4Y", skills:["sk16","sk17","sk11"],  label:"Executive path"},
+      {from:"n4b", to:"n5",  timeline:"3Y", skills:["sk16","sk18","sk17"],  label:"Executive path"},
     ]},
-    {id:"cp02",title:"Network & Cybersecurity Track",department:"Technology",nodes:[
-      {id:"d1",role:"Network Engineer",         level:1},
-      {id:"d2",role:"Network Architect",        level:2},
-      {id:"d3a",role:"Security Architect",      level:3},
-      {id:"d3b",role:"Infrastructure Architect",level:3},
-      {id:"d4",role:"Cybersecurity Executive",  level:4},
-    ],edges:[
-      {from:"d1", to:"d2",  timeline:"2Y",skills:["sk07","sk03"],        label:"Architect move"},
-      {from:"d2", to:"d3a", timeline:"2Y",skills:["sk08","sk07"],        label:"Security fork"},
-      {from:"d2", to:"d3b", timeline:"3Y",skills:["sk03","sk18"],        label:"Infrastructure fork"},
-      {from:"d3a",to:"d4",  timeline:"4Y",skills:["sk16","sk18","sk17"], label:"Executive path"},
-      {from:"d3b",to:"d4",  timeline:"4Y",skills:["sk16","sk08","sk17"], label:"Executive path"},
+    {id:"cp02", title:"Network & Cybersecurity Track", department:"Technology", nodes:[
+      {id:"d1",  role:"Network Engineer",          level:1},
+      {id:"d2",  role:"Network Architect",         level:2},
+      {id:"d3a", role:"Security Architect",        level:3},
+      {id:"d3b", role:"Infrastructure Architect",  level:3},
+      {id:"d4",  role:"Cybersecurity Executive",   level:4},
+    ], edges:[
+      {from:"d1",  to:"d2",  timeline:"2Y", skills:["sk07","sk03"],         label:"Architect move"},
+      {from:"d2",  to:"d3a", timeline:"2Y", skills:["sk08","sk07"],         label:"Security fork"},
+      {from:"d2",  to:"d3b", timeline:"3Y", skills:["sk03","sk18"],         label:"Infrastructure fork"},
+      {from:"d3a", to:"d4",  timeline:"4Y", skills:["sk16","sk18","sk17"],  label:"Executive path"},
+      {from:"d3b", to:"d4",  timeline:"4Y", skills:["sk16","sk08","sk17"],  label:"Executive path"},
     ]},
-    {id:"cp03",title:"HCM Product & Delivery Track",department:"HR",nodes:[
-      {id:"h1",role:"HCM Consultant",           level:1},
-      {id:"h2",role:"HCM Product Owner",        level:2},
-      {id:"h3a",role:"HCM Product Manager",     level:3},
-      {id:"h3b",role:"HCM Delivery Manager",    level:3},
-      {id:"h4",role:"HCM Executive Manager",    level:4},
-    ],edges:[
-      {from:"h1", to:"h2",  timeline:"2Y",skills:["sk09","sk10","sk14"], label:"Product track"},
-      {from:"h2", to:"h3a", timeline:"3Y",skills:["sk10","sk17","sk16"], label:"Product Mgr fork"},
-      {from:"h2", to:"h3b", timeline:"2Y",skills:["sk12","sk14","sk17"], label:"Delivery fork"},
-      {from:"h3a",to:"h4",  timeline:"4Y",skills:["sk16","sk17","sk11"], label:"Executive path"},
-      {from:"h3b",to:"h4",  timeline:"3Y",skills:["sk16","sk11","sk17"], label:"Executive path"},
-    ]},
-  ],
-
-  interviews:[
-    {id:"i1",employee_id:"e06",employee_name:"OUTTRABADY Richard",  department:"Technology",interviewer:"QAISSI Yassir",    scheduled_date:"2025-03-10",status:"completed",mobility_readiness:4,skills_assessed:true, next_interview_due:"2028-03-10",aspirations:"Architecture Executive",notes:"Strong technical profile, ready for senior step"},
-    {id:"i2",employee_id:"e16",employee_name:"SLUITER John",        department:"Technology",interviewer:"BOURON Charley",   scheduled_date:"2025-06-15",status:"completed",mobility_readiness:5,skills_assessed:true, next_interview_due:"2028-06-15",aspirations:"Architecture Executive",notes:"Exceptional — ready now"},
-    {id:"i3",employee_id:"e28",employee_name:"ARABADJIAN Ines",     department:"HR",        interviewer:"SLIMANI Hakim",   scheduled_date:"2026-05-20",status:"scheduled", mobility_readiness:null,skills_assessed:false,next_interview_due:"2029-05-20",aspirations:"HCM Product Manager",notes:""},
-    {id:"i4",employee_id:"e34",employee_name:"LERAY Melanie",       department:"HR",        interviewer:"SLIMANI Hakim",   scheduled_date:"2025-11-10",status:"completed",mobility_readiness:4,skills_assessed:true, next_interview_due:"2028-11-10",aspirations:"HCM Product Manager",notes:"High potential in talent attraction"},
-    {id:"i5",employee_id:"e05",employee_name:"AGUERE Sebastien",    department:"Technology",interviewer:"QAISSI Yassir",   scheduled_date:"2026-06-01",status:"scheduled", mobility_readiness:null,skills_assessed:false,next_interview_due:"2029-06-01",aspirations:"Principal Architect",notes:""},
-  ],
-
-  action_plans:[
-    {id:"a1",employee_id:"e06",employee_name:"OUTTRABADY Richard", title:"TOGAF Certification",              description:"Enterprise Architecture certification",horizon:"1Y",status:"in_progress",due_date:"2026-09-01"},
-    {id:"a2",employee_id:"e02",employee_name:"KASSAOUI Abbes",     title:"AWS Advanced Networking",          description:"Specialisation certification",         horizon:"1Y",status:"open",        due_date:"2026-12-01"},
-    {id:"a3",employee_id:"e16",employee_name:"SLUITER John",       title:"Strategic Leadership Programme",   description:"HEC Executive programme",             horizon:"2Y",status:"in_progress",due_date:"2027-06-01"},
-    {id:"a4",employee_id:"e34",employee_name:"LERAY Melanie",      title:"Product Management Certification", description:"PM certification via LinkedIn",        horizon:"1Y",status:"open",        due_date:"2026-10-01"},
-    {id:"a5",employee_id:"e01",employee_name:"GODIN Neo",          title:"MLOps Engineering Specialisation", description:"Coursera MLOps track",                horizon:"1Y",status:"in_progress",due_date:"2026-08-01"},
-  ],
-
-  opportunities:[
-    {id:"o1",title:"Principal Architect",          department:"Technology",required_skills:["sk03","sk18","sk16"],location:"Paris",open_date:"2026-03-01",status:"open",priority:"high"},
-    {id:"o2",title:"Cybersecurity Architect",      department:"Technology",required_skills:["sk08","sk07","sk03"],location:"Paris",open_date:"2026-02-15",status:"open",priority:"critical"},
-    {id:"o3",title:"HCM Product Manager",          department:"HR",        required_skills:["sk10","sk09","sk17"],location:"Paris",open_date:"2026-03-10",status:"open",priority:"normal"},
-    {id:"o4",title:"Enterprise Architect",         department:"Technology",required_skills:["sk18","sk16","sk17"],location:"Paris",open_date:"2026-04-01",status:"open",priority:"high"},
-    {id:"o5",title:"MLOps Platform Engineer",      department:"Technology",required_skills:["sk05","sk06","sk02"],location:"Paris",open_date:"2026-04-05",status:"open",priority:"critical"},
-  ],
-
-  matches:[
-    {id:"m1",employee_id:"e06",employee_name:"OUTTRABADY Richard",employee_dept:"Technology",opportunity_id:"o4",job_title:"Enterprise Architect",     location:"Paris",priority:"high",    match_score:91,status:"suggested",scored_by:"ai1"},
-    {id:"m2",employee_id:"e16",employee_name:"SLUITER John",       employee_dept:"Technology",opportunity_id:"o4",job_title:"Enterprise Architect",     location:"Paris",priority:"high",    match_score:94,status:"reviewed", scored_by:"ai1"},
-    {id:"m3",employee_id:"e34",employee_name:"LERAY Melanie",      employee_dept:"HR",        opportunity_id:"o3",job_title:"HCM Product Manager",      location:"Paris",priority:"normal",  match_score:87,status:"suggested",scored_by:"ai1"},
-    {id:"m4",employee_id:"e01",employee_name:"GODIN Neo",          employee_dept:"Technology",opportunity_id:"o5",job_title:"MLOps Platform Engineer",  location:"Paris",priority:"critical",match_score:83,status:"suggested",scored_by:"ai1"},
-    {id:"m5",employee_id:"e05",employee_name:"AGUERE Sebastien",   employee_dept:"Technology",opportunity_id:"o1",job_title:"Principal Architect",      location:"Paris",priority:"high",    match_score:88,status:"suggested",scored_by:"ai1"},
-  ],
-
-  workflows:[
-    {id:"wf1",title:"Mobility — OUTTRABADY Richard",employee_id:"e06",employee_name:"OUTTRABADY Richard",type:"mobility_request",target_role:"Enterprise Architect",status:"in_progress",current_step:2,created_at:"2026-03-15",steps:[
-      {id:"s1",label:"Employee Request",role:"employee",status:"completed",  actor:"OUTTRABADY Richard",completed_at:"2026-03-15"},
-      {id:"s2",label:"Manager Review",  role:"manager", status:"completed",  actor:"QAISSI Yassir",      completed_at:"2026-03-18",notes:"Strongly supported"},
-      {id:"s3",label:"HR Validation",   role:"hr",      status:"in_progress",actor:"HR Team",            completed_at:null},
-      {id:"s4",label:"AI Smart Fit",    role:"ai_agent",status:"pending",    actor:"ARIA-Matcher",       completed_at:null},
-      {id:"s5",label:"Assignment",      role:"hr",      status:"pending",    actor:"HR Team",            completed_at:null},
-    ]},
-    {id:"wf2",title:"Interview — ARABADJIAN Ines",employee_id:"e28",employee_name:"ARABADJIAN Ines",type:"career_interview",target_role:null,status:"draft",current_step:0,created_at:"2026-04-01",steps:[
-      {id:"s1",label:"Schedule",        role:"hr",      status:"pending",actor:null,completed_at:null},
-      {id:"s2",label:"Preparation",     role:"employee",status:"pending",actor:null,completed_at:null},
-      {id:"s3",label:"Interview",       role:"manager", status:"pending",actor:null,completed_at:null},
-      {id:"s4",label:"Skills Assessment",role:"ai_agent",status:"pending",actor:null,completed_at:null},
-      {id:"s5",label:"Action Plan",     role:"hr",      status:"pending",actor:null,completed_at:null},
-    ]},
-    {id:"wf3",title:"Upskilling — GODIN Neo",employee_id:"e01",employee_name:"GODIN Neo",type:"upskilling",target_role:"MLOps Platform Engineer",status:"in_progress",current_step:2,created_at:"2026-02-10",steps:[
-      {id:"s1",label:"Gap Analysis",    role:"ai_agent",status:"completed",  actor:"SKIM-Analyzer",  completed_at:"2026-02-12",notes:"2 skill gaps identified"},
-      {id:"s2",label:"Plan Design",     role:"hr",      status:"completed",  actor:"HR Team",        completed_at:"2026-02-18"},
-      {id:"s3",label:"Approval",        role:"manager", status:"in_progress",actor:"QAISSI Yassir",  completed_at:null},
-      {id:"s4",label:"Enrollment",      role:"employee",status:"pending",    actor:null,             completed_at:null},
-      {id:"s5",label:"Tracking",        role:"ai_agent",status:"pending",    actor:null,             completed_at:null},
+    {id:"cp03", title:"HCM Product & Delivery Track", department:"HR", nodes:[
+      {id:"h1",  role:"HCM Consultant",            level:1},
+      {id:"h2",  role:"HCM Product Owner",         level:2},
+      {id:"h3a", role:"HCM Product Manager",       level:3},
+      {id:"h3b", role:"HCM Delivery Manager",      level:3},
+      {id:"h4",  role:"HCM Executive Manager",     level:4},
+    ], edges:[
+      {from:"h1",  to:"h2",  timeline:"2Y", skills:["sk09","sk10","sk14"], label:"Product track"},
+      {from:"h2",  to:"h3a", timeline:"3Y", skills:["sk10","sk17","sk16"], label:"Product Mgr fork"},
+      {from:"h2",  to:"h3b", timeline:"2Y", skills:["sk12","sk14","sk17"], label:"Delivery fork"},
+      {from:"h3a", to:"h4",  timeline:"4Y", skills:["sk16","sk17","sk11"], label:"Executive path"},
+      {from:"h3b", to:"h4",  timeline:"3Y", skills:["sk16","sk11","sk17"], label:"Executive path"},
     ]},
   ],
 
-  role_skills:[
-    {id:"rs01",role:"Cloud and Solution Architect",  department:"Technology",required_skills:[{skill_id:"sk03",level:4},{skill_id:"sk18",level:3},{skill_id:"sk16",level:3}]},
-    {id:"rs02",role:"Enterprise Architecture Expert",department:"Technology",required_skills:[{skill_id:"sk18",level:5},{skill_id:"sk16",level:4},{skill_id:"sk11",level:3}]},
-    {id:"rs03",role:"Network Infrastructure Architect",department:"Technology",required_skills:[{skill_id:"sk07",level:4},{skill_id:"sk03",level:3},{skill_id:"sk08",level:3}]},
-    {id:"rs04",role:"HCM Global HR Product Owner",  department:"HR",        required_skills:[{skill_id:"sk10",level:4},{skill_id:"sk09",level:4},{skill_id:"sk14",level:3}]},
-    {id:"rs05",role:"Product Owner",                department:"HR",        required_skills:[{skill_id:"sk10",level:3},{skill_id:"sk17",level:3},{skill_id:"sk14",level:3}]},
-    {id:"rs06",role:"SDLC and MLOps Architect",     department:"Technology",required_skills:[{skill_id:"sk05",level:4},{skill_id:"sk06",level:4},{skill_id:"sk02",level:3}]},
+  interviews: [
+    {id:"i1", employee_id:"e06", employee_name:"Nicolas LAMBERT",  department:"Technology", interviewer:"Alexandre DUPONT",  scheduled_date:"2025-03-10", status:"completed", mobility_readiness:4, skills_assessed:true,  next_interview_due:"2028-03-10", aspirations:"Architecture Executive",   notes:"Strong technical profile, ready for senior step"},
+    {id:"i2", employee_id:"e16", employee_name:"Pierre ROBERT",    department:"Technology", interviewer:"Charley SIMON",     scheduled_date:"2025-06-15", status:"completed", mobility_readiness:5, skills_assessed:true,  next_interview_due:"2028-06-15", aspirations:"Architecture Executive",   notes:"Exceptional — ready now"},
+    {id:"i3", employee_id:"e28", employee_name:"Camille PERRIN",   department:"HR",         interviewer:"Sophie LECLERC",   scheduled_date:"2026-05-20", status:"scheduled", mobility_readiness:null,skills_assessed:false, next_interview_due:"2029-05-20", aspirations:"HCM Product Manager",     notes:""},
+    {id:"i4", employee_id:"e34", employee_name:"Isabelle VIDAL",   department:"HR",         interviewer:"Sophie LECLERC",   scheduled_date:"2025-11-10", status:"completed", mobility_readiness:4, skills_assessed:true,  next_interview_due:"2028-11-10", aspirations:"HCM Product Manager",     notes:"High potential in talent attraction"},
+    {id:"i5", employee_id:"e05", employee_name:"Julien GARCIA",    department:"Technology", interviewer:"Alexandre DUPONT",  scheduled_date:"2026-06-01", status:"scheduled", mobility_readiness:null,skills_assessed:false, next_interview_due:"2029-06-01", aspirations:"Principal Architect",     notes:""},
   ],
 
-  analytics:{
-    skills_coverage:[
-      {department:"Technology",total_skills:8,assessed:6,coverage:75},
-      {department:"HR",        total_skills:6,assessed:4,coverage:67},
+  action_plans: [
+    {id:"a1", employee_id:"e06", employee_name:"Nicolas LAMBERT",  title:"TOGAF Certification",               description:"Enterprise Architecture certification", horizon:"1Y", status:"in_progress", due_date:"2026-09-01"},
+    {id:"a2", employee_id:"e02", employee_name:"Thomas ROUSSEAU",  title:"AWS Advanced Networking",           description:"Specialisation certification",          horizon:"1Y", status:"open",         due_date:"2026-12-01"},
+    {id:"a3", employee_id:"e16", employee_name:"Pierre ROBERT",    title:"Strategic Leadership Programme",    description:"HEC Executive programme",              horizon:"2Y", status:"in_progress", due_date:"2027-06-01"},
+    {id:"a4", employee_id:"e34", employee_name:"Isabelle VIDAL",   title:"Product Management Certification",  description:"PM certification via LinkedIn",         horizon:"1Y", status:"open",         due_date:"2026-10-01"},
+    {id:"a5", employee_id:"e01", employee_name:"Lucas BERNARD",    title:"MLOps Engineering Specialisation",  description:"Coursera MLOps track",                 horizon:"1Y", status:"in_progress", due_date:"2026-08-01"},
+  ],
+
+  opportunities: [
+    {id:"o1", title:"Principal Architect",         department:"Technology", required_skills:["sk03","sk18","sk16"], location:"Paris", open_date:"2026-03-01", status:"open", priority:"high"},
+    {id:"o2", title:"Cybersecurity Architect",     department:"Technology", required_skills:["sk08","sk07","sk03"], location:"Paris", open_date:"2026-02-15", status:"open", priority:"critical"},
+    {id:"o3", title:"HCM Product Manager",         department:"HR",         required_skills:["sk10","sk09","sk17"], location:"Paris", open_date:"2026-03-10", status:"open", priority:"normal"},
+    {id:"o4", title:"Enterprise Architect",        department:"Technology", required_skills:["sk18","sk16","sk17"], location:"Paris", open_date:"2026-04-01", status:"open", priority:"high"},
+    {id:"o5", title:"MLOps Platform Engineer",     department:"Technology", required_skills:["sk05","sk06","sk02"], location:"Paris", open_date:"2026-04-05", status:"open", priority:"critical"},
+  ],
+
+  matches: [
+    {id:"m1", employee_id:"e06", employee_name:"Nicolas LAMBERT",  employee_dept:"Technology", opportunity_id:"o4", job_title:"Enterprise Architect",    location:"Paris", priority:"high",     match_score:91, status:"suggested", scored_by:"ai1"},
+    {id:"m2", employee_id:"e16", employee_name:"Pierre ROBERT",    employee_dept:"Technology", opportunity_id:"o4", job_title:"Enterprise Architect",    location:"Paris", priority:"high",     match_score:94, status:"reviewed",  scored_by:"ai1"},
+    {id:"m3", employee_id:"e34", employee_name:"Isabelle VIDAL",   employee_dept:"HR",         opportunity_id:"o3", job_title:"HCM Product Manager",     location:"Paris", priority:"normal",   match_score:87, status:"suggested", scored_by:"ai1"},
+    {id:"m4", employee_id:"e01", employee_name:"Lucas BERNARD",    employee_dept:"Technology", opportunity_id:"o5", job_title:"MLOps Platform Engineer", location:"Paris", priority:"critical", match_score:83, status:"suggested", scored_by:"ai1"},
+    {id:"m5", employee_id:"e05", employee_name:"Julien GARCIA",    employee_dept:"Technology", opportunity_id:"o1", job_title:"Principal Architect",     location:"Paris", priority:"high",     match_score:88, status:"suggested", scored_by:"ai1"},
+  ],
+
+  workflows: [
+    {id:"wf1", title:"Mobility — Nicolas LAMBERT", employee_id:"e06", employee_name:"Nicolas LAMBERT", type:"mobility_request", target_role:"Enterprise Architect",    status:"in_progress", current_step:2, created_at:"2026-03-15", steps:[
+      {id:"s1", label:"Employee Request",  role:"employee",  status:"completed",   actor:"Nicolas LAMBERT",   completed_at:"2026-03-15"},
+      {id:"s2", label:"Manager Review",    role:"manager",   status:"completed",   actor:"Alexandre DUPONT",  completed_at:"2026-03-18", notes:"Strongly supported"},
+      {id:"s3", label:"HR Validation",     role:"hr",        status:"in_progress", actor:"HR Team",            completed_at:null},
+      {id:"s4", label:"AI Smart Fit",      role:"ai_agent",  status:"pending",     actor:"ARIA-Matcher",       completed_at:null},
+      {id:"s5", label:"Assignment",        role:"hr",        status:"pending",     actor:"HR Team",            completed_at:null},
+    ]},
+    {id:"wf2", title:"Interview — Camille PERRIN", employee_id:"e28", employee_name:"Camille PERRIN", type:"career_interview", target_role:null, status:"draft", current_step:0, created_at:"2026-04-01", steps:[
+      {id:"s1", label:"Schedule",          role:"hr",        status:"pending", actor:null, completed_at:null},
+      {id:"s2", label:"Preparation",       role:"employee",  status:"pending", actor:null, completed_at:null},
+      {id:"s3", label:"Interview",         role:"manager",   status:"pending", actor:null, completed_at:null},
+      {id:"s4", label:"Skills Assessment", role:"ai_agent",  status:"pending", actor:null, completed_at:null},
+      {id:"s5", label:"Action Plan",       role:"hr",        status:"pending", actor:null, completed_at:null},
+    ]},
+    {id:"wf3", title:"Upskilling — Lucas BERNARD", employee_id:"e01", employee_name:"Lucas BERNARD", type:"upskilling", target_role:"MLOps Platform Engineer", status:"in_progress", current_step:2, created_at:"2026-02-10", steps:[
+      {id:"s1", label:"Gap Analysis",      role:"ai_agent",  status:"completed",   actor:"SKIM-Analyzer",     completed_at:"2026-02-12", notes:"2 skill gaps identified"},
+      {id:"s2", label:"Plan Design",       role:"hr",        status:"completed",   actor:"HR Team",            completed_at:"2026-02-18"},
+      {id:"s3", label:"Approval",          role:"manager",   status:"in_progress", actor:"Alexandre DUPONT",  completed_at:null},
+      {id:"s4", label:"Enrollment",        role:"employee",  status:"pending",     actor:null,                 completed_at:null},
+      {id:"s5", label:"Tracking",          role:"ai_agent",  status:"pending",     actor:null,                 completed_at:null},
+    ]},
+  ],
+
+  role_skills: [
+    {id:"rs01", role:"Cloud and Solution Architect",       department:"Technology", required_skills:[{skill_id:"sk03",level:4},{skill_id:"sk18",level:3},{skill_id:"sk16",level:3}]},
+    {id:"rs02", role:"Enterprise Architecture Expert",     department:"Technology", required_skills:[{skill_id:"sk18",level:5},{skill_id:"sk16",level:4},{skill_id:"sk11",level:3}]},
+    {id:"rs03", role:"Network Infrastructure Architect",   department:"Technology", required_skills:[{skill_id:"sk07",level:4},{skill_id:"sk03",level:3},{skill_id:"sk08",level:3}]},
+    {id:"rs04", role:"HCM Global HR Product Owner",        department:"HR",         required_skills:[{skill_id:"sk10",level:4},{skill_id:"sk09",level:4},{skill_id:"sk14",level:3}]},
+    {id:"rs05", role:"Product Owner",                      department:"HR",         required_skills:[{skill_id:"sk10",level:3},{skill_id:"sk17",level:3},{skill_id:"sk14",level:3}]},
+    {id:"rs06", role:"SDLC and MLOps Architect",           department:"Technology", required_skills:[{skill_id:"sk05",level:4},{skill_id:"sk06",level:4},{skill_id:"sk02",level:3}]},
+    {id:"rs07", role:"Lead Cloud SDLC & Security Architect",department:"Technology",required_skills:[{skill_id:"sk03",level:5},{skill_id:"sk08",level:4},{skill_id:"sk16",level:3}]},
+  ],
+
+  analytics: {
+    skills_coverage: [
+      {department:"Technology", total_skills:8, assessed:6, coverage:75},
+      {department:"HR",         total_skills:6, assessed:4, coverage:67},
     ],
-    talent_hoarding:[
-      {manager:"BOURON Charley",dept:"Technology",employees_blocked:1,avg_tenure:5.2,risk:"high"},
-      {manager:"SLIMANI Hakim", dept:"HR",        employees_blocked:0,avg_tenure:3.1,risk:"low"},
-      {manager:"QAISSI Yassir", dept:"Technology",employees_blocked:0,avg_tenure:4.8,risk:"low"},
+    talent_hoarding: [
+      {manager:"Charley SIMON",    dept:"Technology", employees_blocked:1, avg_tenure:5.2, risk:"high"},
+      {manager:"Alexandre DUPONT", dept:"Technology", employees_blocked:0, avg_tenure:4.8, risk:"low"},
+      {manager:"Sophie LECLERC",   dept:"HR",         employees_blocked:0, avg_tenure:3.1, risk:"low"},
     ],
-    promoter_metrics:[
-      {name:"OUTTRABADY Richard",manager:"QAISSI Yassir", mobility_score:91,readiness:4,recommended:true},
-      {name:"SLUITER John",      manager:"BOURON Charley",mobility_score:94,readiness:5,recommended:true},
-      {name:"LERAY Melanie",     manager:"SLIMANI Hakim", mobility_score:87,readiness:4,recommended:true},
-      {name:"GODIN Neo",         manager:"QAISSI Yassir", mobility_score:83,readiness:3,recommended:false},
+    promoter_metrics: [
+      {name:"Nicolas LAMBERT",  manager:"Alexandre DUPONT", mobility_score:91, readiness:4, recommended:true},
+      {name:"Pierre ROBERT",    manager:"Charley SIMON",    mobility_score:94, readiness:5, recommended:true},
+      {name:"Isabelle VIDAL",   manager:"Sophie LECLERC",   mobility_score:87, readiness:4, recommended:true},
+      {name:"Lucas BERNARD",    manager:"Alexandre DUPONT", mobility_score:83, readiness:3, recommended:false},
     ],
-    ai_vs_human:{human_tasks:1240,ai_tasks:3891,ai_accuracy:93.1},
-    monthly:[
-      {month:"Oct",interviews:3,matches:8, placements:1},
-      {month:"Nov",interviews:4,matches:12,placements:2},
-      {month:"Dec",interviews:2,matches:9, placements:1},
-      {month:"Jan",interviews:5,matches:15,placements:3},
-      {month:"Feb",interviews:6,matches:18,placements:4},
-      {month:"Mar",interviews:4,matches:14,placements:2},
+    ai_vs_human: {human_tasks:1240, ai_tasks:3891, ai_accuracy:93.1},
+    monthly: [
+      {month:"Oct", interviews:3, matches:8,  placements:1},
+      {month:"Nov", interviews:4, matches:12, placements:2},
+      {month:"Dec", interviews:2, matches:9,  placements:1},
+      {month:"Jan", interviews:5, matches:15, placements:3},
+      {month:"Feb", interviews:6, matches:18, placements:4},
+      {month:"Mar", interviews:4, matches:14, placements:2},
     ],
   },
 };
@@ -421,9 +423,9 @@ function AuthPage({onLogin}) {
     setLoading(true);
     const userMap = {
       admin:    { id:"u0", name:"QAISSI Yassir",   email, role:"admin",   department:"Technology", is_manager:true, team:["e01","e02","e03","e04","e05","e06"] },
-      hr:       { id:"u1", name:"SLIMANI Hakim",    email:"hakim.slimani@axa.com",  role:"hr",      department:"HR",         employee_id:"mgr2" },
-      manager:  { id:"u2", name:"BOURON Charley",   email:"charley.bouron@axa.com",   role:"manager", department:"Technology",  employee_id:"mgr1", is_manager:true, team:["e11","e12","e13","e14","e15","e16"] },
-      employee: { id:"u3", name:"SLUITER John",     email:"j.sluiter@axa.com",  role:"employee",department:"Technology",  employee_id:"e16" },
+      hr:       { id:"u1", name:"Sophie LECLERC",    email:"Sophie.LECLERC@axa.com",  role:"hr",      department:"HR",         employee_id:"mgr2" },
+      manager:  { id:"u2", name:"Charley SIMON",   email:"Charley.SIMON@axa.com",   role:"manager", department:"Technology",  employee_id:"mgr1", is_manager:true, team:["e11","e12","e13","e14","e15","e16"] },
+      employee: { id:"u3", name:"SAINT John",     email:"j.SAINT@axa.com",  role:"employee",department:"Technology",  employee_id:"e16" },
 };
     setTimeout(()=>onLogin(userMap[role]||userMap.admin),600);
   };
