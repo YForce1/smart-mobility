@@ -901,18 +901,13 @@ const PgRefs=({store,setStore,setToast})=>{
 // ══════════════════════════════════════════════════════════════
 const PgAgents=({store,setStore,setToast})=>{
   const agents=store.agents||DEFAULT_AGENTS;
-  const tasks=store.agentTasks||[];
   const setAgents=(fn)=>setStore(p=>({...p,agents:typeof fn==="function"?fn(agents):fn}));
-  const setTasks=(fn)=>setStore(p=>({...p,agentTasks:typeof fn==="function"?fn(tasks):fn}));
   const[showNew,setShowNew]=useState(false);
-  const[showTask,setShowTask]=useState(false);
   const[newA,setNewA]=useState({name:"",role:"",prompt:"",model:LLM_MODELS[0],validator:"",container:CONTAINERS[0],status:"idle"});
-  const[newT,setNewT]=useState({title:"",desc:"",agentId:"auto"});
-  const createAgent=()=>{if(!newA.name||!newA.role){setToast("⚠️ Name and role required");return;}if(!newA.validator){setToast("⚠️ Human validator required");return;}setAgents(p=>[...p,{...newA,id:`ai-${Date.now()}`,accuracy:85,tasks:0,deployed:new Date().toISOString().slice(0,10)}]);setToast("✅ Agent created");setShowNew(false);setNewA({name:"",role:"",prompt:"",model:LLM_MODELS[0],validator:"",container:CONTAINERS[0],status:"idle"});};
-  const createTask=()=>{if(!newT.title){setToast("⚠️ Title required");return;}let agentId=newT.agentId;if(agentId==="auto"){const words=(newT.title+" "+newT.desc).toLowerCase();const match=agents.find(a=>words.includes(a.role.toLowerCase().split(" ")[0]));agentId=match?.id||agents[0]?.id;}const ag=agents.find(a=>a.id===agentId);setTasks(p=>[...p,{id:Date.now(),title:newT.title,desc:newT.desc,agentId,agentName:ag?.name,status:"Assigned",created:new Date().toISOString().slice(0,10)}]);setAgents(p=>p.map(a=>a.id===agentId?{...a,tasks:a.tasks+1}:a));setToast(`✅ Task assigned to ${ag?.name}`);setShowTask(false);setNewT({title:"",desc:"",agentId:"auto"});};
+  const createAgent=()=>{if(!newA.name||!newA.role){setToast("⚠️ Name and role required");return;}setAgents(p=>[...p,{...newA,id:`ai-${Date.now()}`,accuracy:85,tasks:0,deployed:new Date().toISOString().slice(0,10)}]);setToast("✅ Agent created");setShowNew(false);setNewA({name:"",role:"",prompt:"",model:LLM_MODELS[0],validator:"",container:CONTAINERS[0],status:"idle"});};
   
   return(<div>
-    <div style={S.between}><div><h3 style={S.h3}>AI Agents Management</h3><p style={{fontSize:11,color:T.inkMuted,marginTop:2}}>Create agents, assign tasks, monitor execution</p></div><div style={S.flex}><button onClick={()=>setShowTask(true)} style={{...S.btn,...S.btnO}}>+ Create Task</button><button onClick={()=>setShowNew(true)} style={S.btn}>+ New Agent</button></div></div>
+    <div style={S.between}><div><h3 style={S.h3}>AI Agents Management</h3></div><button onClick={()=>setShowNew(true)} style={S.btn}>+ New Agent</button></div>
     <div style={{...S.g4,marginTop:12}}>{[{l:"Active",v:agents.filter(a=>a.status==="active").length,c:T.teal},{l:"Training",v:agents.filter(a=>a.status==="training").length,c:T.orange},{l:"Idle",v:agents.filter(a=>a.status==="idle").length,c:T.inkMuted},{l:"Tasks",v:agents.reduce((s,a)=>s+a.tasks,0),c:T.violet}].map(k=>(<div key={k.l} style={S.card}><div style={{fontSize:9,color:T.inkMuted,textTransform:"uppercase",fontWeight:600}}>{k.l}</div><div style={{fontSize:24,fontWeight:800,fontFamily:FH,color:k.c,marginTop:4}}>{k.v}</div></div>))}</div>
     <div style={{...S.g2,marginTop:12}}>{agents.map(a=>(<div key={a.id} style={{...S.card,borderLeft:`4px solid ${a.status==="active"?T.teal:a.status==="training"?T.orange:T.inkDim}`}}>
       <div style={S.between}><div style={S.flex}><span style={{fontSize:18}}>🤖</span><div><div style={{fontSize:13,fontWeight:700}}>{a.name}</div><div style={{fontSize:10,color:T.inkMuted}}>{a.role}</div></div></div><Bd status={a.status}/></div>
@@ -929,18 +924,8 @@ const PgAgents=({store,setStore,setToast})=>{
         <div><label style={S.label}>Model</label><select style={{...S.select,width:"100%"}} value={newA.model} onChange={e=>setNewA(p=>({...p,model:e.target.value}))}>{LLM_MODELS.map(m=><option key={m}>{m}</option>)}</select></div>
         <div><label style={S.label}>Container</label><select style={{...S.select,width:"100%"}} value={newA.container} onChange={e=>setNewA(p=>({...p,container:e.target.value}))}>{CONTAINERS.map(c=><option key={c}>{c}</option>)}</select></div>
       </div>
-      <div style={{marginTop:10}}><label style={S.label}>Human Validator (Manager) *</label><select style={{...S.select,width:"100%"}} value={newA.validator} onChange={e=>setNewA(p=>({...p,validator:e.target.value}))}><option value="">Select a manager...</option>{EMP.filter(e=>e.level==="Lead"||e.level==="Senior").map(e=><option key={e.id} value={e.name}>{e.name} — {e.role}</option>)}</select><div style={{fontSize:9,color:T.inkMuted,marginTop:3}}>The human manager responsible for validating this agent's outputs</div></div>
       <div style={{...S.flex,marginTop:14}}><button onClick={createAgent} style={S.btn}>✅ Create</button><button onClick={()=>setShowNew(false)} style={{...S.btn,...S.btnO}}>Cancel</button></div>
     </div></div>}
-    {showTask&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:999,padding:20}} onClick={()=>setShowTask(false)}><div style={{...S.card,width:440,padding:24}} onClick={e=>e.stopPropagation()}>
-      <h3 style={S.h3}>Create Task · Assign to AI Agent</h3>
-      <p style={{fontSize:11,color:T.inkMuted,marginTop:4}}>Assign manually or let the system auto-match based on specialization.</p>
-      <div style={{marginTop:12}}><label style={S.label}>Task Title *</label><input style={S.input} value={newT.title} onChange={e=>setNewT(p=>({...p,title:e.target.value}))} placeholder="e.g. Match 5 candidates to ML Engineer role"/></div>
-      <div style={{marginTop:10}}><label style={S.label}>Description</label><textarea style={{...S.input,minHeight:60}} value={newT.desc} onChange={e=>setNewT(p=>({...p,desc:e.target.value}))} placeholder="Details, context, expected output..."/></div>
-      <div style={{marginTop:10}}><label style={S.label}>Assign To</label><select style={{...S.select,width:"100%"}} value={newT.agentId} onChange={e=>setNewT(p=>({...p,agentId:e.target.value}))}><option value="auto">🤖 Auto-assign (based on specialization)</option>{agents.map(a=><option key={a.id} value={a.id}>{a.name} — {a.role}</option>)}</select></div>
-      <div style={{...S.flex,marginTop:14}}><button onClick={createTask} style={S.btn}>✅ Create Task</button><button onClick={()=>setShowTask(false)} style={{...S.btn,...S.btnO}}>Cancel</button></div>
-    </div></div>}
-    {tasks.length>0&&<div style={{marginTop:16}}><h3 style={{...S.h3,marginBottom:8}}>Recent Tasks ({tasks.length})</h3>{tasks.slice(-5).reverse().map(t=>(<div key={t.id} style={{...S.card,padding:10}}><div style={S.between}><div style={{fontSize:12,fontWeight:600}}>{t.title}</div><div style={S.flex}><Bd status={t.agentName} custom={T.violet}/><Bd status={t.status}/></div></div>{t.desc&&<div style={{fontSize:10,color:T.inkMuted,marginTop:3}}>{t.desc}</div>}<div style={{fontSize:9,color:T.inkDim,marginTop:3}}>Created: {t.created}</div></div>))}</div>}
   </div>);
 };
 
