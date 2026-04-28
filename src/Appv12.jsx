@@ -73,47 +73,7 @@ const WF=["Scheduled","Interview","Gap","Plan","Match","Apply","Done"];
 const genPaths=()=>{const tpl=[{d:"Technology",p:["Junior Dev → Senior Dev → Tech Lead → Staff Engineer → Principal Architect","Backend → API Architect → Platform Lead → CTO","DevOps → Platform Lead → Cloud Director","Security → Security Engineer → CISO"]},{d:"Data & AI",p:["Data Scientist → Lead Scientist → Chief Data Scientist","ML Engineer → Sr ML → ML Lead → AI Director","NLP Engineer → Conv AI Lead → AI Product Dir","Prompt Engineer → AI Solutions Architect → GenAI Director"]},{d:"Product",p:["Product Analyst → PM → Sr PM → VP Product","UX Researcher → UX Lead → Head Design","Growth Analyst → Growth Manager → VP Growth"]},{d:"HR & Talent",p:["HR Coord → HRBP → HR Manager → HR Director → CHRO","L&D Specialist → L&D Manager → CLO","Change Manager → Change Lead → VP Transformation"]},{d:"Strategy",p:["Strategy Analyst → Strategy Manager → VP Strategy → CSO","Transformation Lead → VP Transformation → CTO"]},{d:"Operations",p:["Ops Analyst → Ops Manager → Head of Ops → COO","Process Analyst → Process Lead → Excellence Director"]},{d:"Finance",p:["FA → Sr FA → Finance Manager → CFO","Actuary → Sr Actuary → Chief Actuary"]},{d:"Risk & Compliance",p:["Risk Analyst → Risk Manager → CRO","Compliance → Sr Compliance → VP Compliance"]}];let id=1;const paths=[];tpl.forEach(g=>g.p.forEach((p,i)=>{const steps=p.split(" → ");paths.push({id:id++,domain:g.d,type:["Expert","Management","Hybrid"][i%3],name:steps[steps.length-1],steps:steps.map((s,si)=>({title:s,level:si+1,skills:SKILLS.slice((id+si*3)%30,(id+si*3)%30+3)}))});}));return paths;};
 const getJobSugg=(emp,paths)=>{const w=emp.role.toLowerCase().split(/\s+/);const dp=paths.filter(p=>{const dm=emp.dept.toLowerCase().includes(p.domain.toLowerCase().split(" ")[0]);const rm=p.steps.some(s=>w.some(x=>x.length>2&&s.title.toLowerCase().includes(x)));return dm||rm;});const r=new Set();dp.forEach(p=>{let f=false;p.steps.forEach(s=>{if(f&&r.size<15)r.add(s.title);if(w.some(x=>x.length>2&&s.title.toLowerCase().includes(x)))f=true;});if(r.size<15)r.add(p.steps[p.steps.length-1].title);});if(r.size<5)dp.slice(0,5).forEach(p=>p.steps.slice(-2).forEach(s=>r.add(s.title)));return[...r].slice(0,12);};
 
-// ── Soft skills subset ──
-const SOFT_SKILLS=["Communication","Leadership","Strategic Thinking","Problem Solving","Negotiation","Presentation Skills","Stakeholder Management","Change Management","Emotional Intelligence","Collaboration","Adaptability","Decision Making","Coaching","Conflict Resolution","Critical Thinking"];
-// ── Role → skill resolver: maps a target role to required hard skills ──
-const ROLE_SKILLS={
-  "CTO":["Cloud Architecture","Strategic Thinking","Leadership","Microservices","Cybersecurity","API Design","Agentic AI","Data Governance"],
-  "Chief Technology Officer":["Cloud Architecture","Strategic Thinking","Leadership","Microservices","Cybersecurity","API Design","Agentic AI","Data Governance"],
-  "VP Product":["Product Management","Strategic Thinking","Stakeholder Management","Financial Modeling","UX Design","Leadership","Business Analysis","Data Governance"],
-  "AI Director":["GenAI","LLM Fine-tuning","RAG Architecture","MLOps","Agentic AI","Strategic Thinking","Leadership","Data Governance"],
-  "Head of Analytics":["Machine Learning","SQL","Power BI","Tableau","Data Engineering","Leadership","Strategic Thinking"],
-  "HR Director":["Change Management","Stakeholder Management","Strategic Thinking","Leadership","Communication","Data Governance"],
-  "Cloud Architect":["Azure","AWS","Cloud Architecture","Microservices","Kubernetes","Terraform","Cybersecurity"],
-  "Chief Data Scientist":["Machine Learning","Deep Learning","Python","Data Engineering","Strategic Thinking","Leadership","NLP"],
-};
-const getRoleSkills=(roleName)=>{if(!roleName)return SKILLS.slice(0,10);const exact=ROLE_SKILLS[roleName];if(exact)return exact;const k=Object.keys(ROLE_SKILLS).find(r=>roleName.toLowerCase().includes(r.toLowerCase())||r.toLowerCase().includes(roleName.toLowerCase()));if(k)return ROLE_SKILLS[k];const w=roleName.toLowerCase();if(w.includes("data")||w.includes("ml")||w.includes("ai"))return ROLE_SKILLS["AI Director"];if(w.includes("cloud")||w.includes("infra")||w.includes("architect"))return ROLE_SKILLS["Cloud Architect"];if(w.includes("hr")||w.includes("talent"))return ROLE_SKILLS["HR Director"];if(w.includes("product")||w.includes("po "))return ROLE_SKILLS["VP Product"];return SKILLS.slice(0,10);};
-// ── Dynamic Q1 options: built from career paths next-step roles ──
-const getAspirationOptions=(emp,paths)=>{const sugg=getJobSugg(emp,paths);return[...sugg.slice(0,8),"Other (free text)"];};
-// ── Build dynamic IQ for a specific employee ──
-const buildIQ=(emp,answers,paths)=>{
-  const aspiration=answers&&answers[1];
-  const targetRole=(answers&&(answers[3]||answers["3c"]))||aspiration||"";
-  const aspirationOpts=emp&&paths?getAspirationOptions(emp,paths):["Expert in current field","Different functional area","People management"];
-  const currentRoleSkills=emp?getRoleSkills(emp.role):SKILLS.slice(0,10);
-  const targetRoleSkills=targetRole?getRoleSkills(targetRole):SKILLS.slice(8,18);
-  const currentSkillOpts=[...currentRoleSkills.slice(0,10),...SOFT_SKILLS.slice(0,10)];
-  const developSkillOpts=[...targetRoleSkills.slice(0,10),...SOFT_SKILLS.slice(0,10)];
-  return[
-    {id:1,q:"Long-term career aspirations?",t:"s",o:aspirationOpts,note:"Suggested next-step roles from your career path"},
-    {id:2,q:"Short-medium term? (3-5y)",t:"s",o:["Progress current role","Different role same level","Higher responsibility","Short-term missions"]},
-    {id:3,q:"Target role aligned with AXA?",t:"job",o:[],note:"Select from career paths or enter custom"},
-    {id:4,q:`Current skills? (${emp?.role||"current role"})`,t:"m",o:currentSkillOpts,addable:true,note:"10 role skills + 10 soft skills"},
-    {id:5,q:"AI skills level?",t:"s",o:["None","Basic","Guided","Autonomous","Expert"]},
-    {id:6,q:`Skills to develop? (${targetRole||"target role"})`,t:"m",o:developSkillOpts,addable:true,note:"10 target-role skills + 10 soft skills"},
-    {id:7,q:"Job change short term?",t:"s",o:["Yes","No"],cond:true},
-    {id:"7a",q:"Reasons not to explore?",t:"s",o:["Comfortable","Gaps first","No opportunities"],on:7,val:"No"},
-    {id:8,q:"When open?",t:"s",o:["6mo","6-12mo","1-2y","2+y","Don't foresee"]},
-    {id:9,q:"Geographic mobility?",t:"s",o:["International","Within country","Remote","No"]},
-    {id:10,q:"Training needed?",t:"m",o:["Formal","On-the-job","Mentoring","Mission","Certification","None"]},
-    {id:11,q:"Opportunities?",t:"x",o:[]}
-  ];
-};
-const IQ_FALLBACK=buildIQ(null,null,null);
+const IQ=[{id:1,q:"Long-term career aspirations?",t:"s",o:["Expert in current field","Different functional area","People management","Strategic / transversal","International","Not sure"]},{id:2,q:"Short-medium term? (3-5y)",t:"s",o:["Progress current role","Different role same level","Higher responsibility","Short-term missions"]},{id:3,q:"Target role aligned with AXA?",t:"job",o:[],note:"Select from career paths or enter custom"},{id:4,q:"Current skills?",t:"m",o:SKILLS.slice(0,20)},{id:5,q:"AI skills level?",t:"s",o:["None","Basic","Guided","Autonomous","Expert"]},{id:6,q:"Skills to develop?",t:"m",o:SKILLS.slice(8,28)},{id:7,q:"Job change short term?",t:"s",o:["Yes","No"],cond:true},{id:"7a",q:"Reasons not to explore?",t:"s",o:["Comfortable","Gaps first","No opportunities"],on:7,val:"No"},{id:8,q:"When open?",t:"s",o:["6mo","6-12mo","1-2y","2+y","Don't foresee"]},{id:9,q:"Geographic mobility?",t:"s",o:["International","Within country","Remote","No"]},{id:10,q:"Training needed?",t:"m",o:["Formal","On-the-job","Mentoring","Mission","Certification","None"]},{id:11,q:"Opportunities?",t:"x",o:[]}];
 
 // ══════════════════════════════════════════════════════════════
 // CHARTER CONTENT — Manifesto + 3-Year Plan
@@ -185,23 +145,18 @@ const QUESTION_BANK={
 };
 
 const generateAssessment=(skill,seed)=>{
-  let bank=QUESTION_BANK[skill]?[...QUESTION_BANK[skill]]:[];
-  // Pad with skill-specific generic questions to reach 10
-  const generic=[
-    {q:`Rate your hands-on experience with ${skill}:`,o:["Theoretical only","Used in 1-2 projects","Used in many projects","Mentor others in it"],correct:2,why:"Self-rated experience predicts task success."},
-    {q:`Last time you applied ${skill} in a real project:`,o:["Never","Over 2 years ago","Within last year","Currently using"],correct:3,why:"Recency correlates with effective application."},
-    {q:`How would you teach ${skill} to a junior?`,o:["Send documentation","Pair-program","Explain principles + exercises","I couldn't"],correct:2,why:"Teaching indicates mastery."},
-    {q:`Most challenging ${skill} situation you handled:`,o:["Routine task","Cross-team complexity","Critical incident","Strategic-level decision"],correct:2,why:"Complexity handled = depth."},
-    {q:`How do you stay current with ${skill}?`,o:["Don't actively","Newsletters / reading","Conferences / community","I create content for others"],correct:2,why:"Active learning sustains expertise."},
-    {q:`In ${skill}, your strongest contribution was:`,o:["Following process","Improving process","Designing new approach","Setting standards across teams"],correct:2,why:"Impact level reveals seniority."},
-    {q:`Common ${skill} mistakes you've seen / made:`,o:["I haven't","Beginner errors","Mid-level pitfalls","Strategic / governance issues"],correct:2,why:"Pattern recognition signals expertise."},
-    {q:`Decision-making confidence in ${skill}:`,o:["Need guidance","Confident in routine","Confident in complex","Trusted authority"],correct:2,why:"Autonomy indicates level."},
-    {q:`${skill} tools / methods you've mastered:`,o:["Basic ones","Mainstream tools","Advanced + automation","Built or extended tools"],correct:2,why:"Tool depth maps to skill depth."},
-    {q:`When ${skill} is at stake, others come to you for:`,o:["Rarely","Quick advice","Complex problem-solving","Strategy & governance"],correct:2,why:"Reputation = real-world validation."}
-  ];
-  bank=[...bank,...generic];
+  // Get skill-specific questions, or fall back to generic
+  let bank=QUESTION_BANK[skill];
+  if(!bank){
+    bank=[
+      {q:`Rate your hands-on experience with ${skill}:`,o:["Theoretical only","Used in 1-2 projects","Used in many projects","Mentor others in it"],correct:2,why:"Self-rated experience predicts task success."},
+      {q:`Last time you applied ${skill} in a real project:`,o:["Never","Over 2 years ago","Within last year","Currently using"],correct:3,why:"Recency strongly correlates with effective skill application."},
+      {q:`How would you teach ${skill} to a junior colleague?`,o:["Send them documentation","Pair-program / pair-work","Explain principles, give exercises","I couldn't teach it"],correct:2,why:"The ability to teach is the strongest indicator of true mastery."},
+    ];
+  }
+  // Pseudo-random selection seeded by date+skill so results vary per assessment
   const shuffled=[...bank].sort(()=>{const x=Math.sin(seed+skill.length)*10000;return(x-Math.floor(x))-0.5;});
-  return shuffled.slice(0,10);
+  return shuffled.slice(0,3);
 };
 
 // ══════════════════════════════════════════════════════════════
@@ -266,13 +221,13 @@ return(<div style={{minHeight:"100vh",background:`linear-gradient(135deg,${T.axa
 // ══════════════════════════════════════════════════════════════
 // SIDEBAR
 // ══════════════════════════════════════════════════════════════
-const NAV=[{k:"dashboard",l:"Dashboard",e:"📊"},{k:"charter",l:"Charter",e:"📜"},{k:"marketplace",l:"Marketplace",e:"🏪"},{k:"team",l:"Team",e:"👥"},{k:"interviews",l:"Discussions",e:"💬"},{k:"careers",l:"Careers",e:"🚀"},{k:"refs",l:"Data & Refs",e:"📚"},{k:"agents",l:"AI Agents",e:"🤖"},{k:"reports",l:"Reports",e:"📈"}];
+const NAV=[{k:"dashboard",l:"Dashboard",e:"📊"},{k:"charter",l:"Charter",e:"📜"},{k:"marketplace",l:"Marketplace",e:"🏪"},{k:"team",l:"Team",e:"👥"},{k:"interviews",l:"Interviews",e:"🎯"},{k:"careers",l:"Careers",e:"🚀"},{k:"refs",l:"Data & Refs",e:"📚"},{k:"agents",l:"AI Agents",e:"🤖"},{k:"reports",l:"Reports",e:"📈"}];
 const Side=({active,go,persona,onLogout})=>(<div style={{width:200,background:T.axaBlue,display:"flex",flexDirection:"column",flexShrink:0}}><div style={{padding:"14px 14px 10px",borderBottom:"1px solid rgba(255,255,255,.1)"}}><div style={{fontFamily:FH,fontSize:13,fontWeight:700,color:"#fff"}}>SMART Mobility</div><div style={{fontSize:8,color:"rgba(255,255,255,.4)",letterSpacing:1}}>AXA GROUP OPS · v8.0</div></div><div style={{flex:1,padding:"4px 0",overflowY:"auto"}}>{NAV.filter(n=>(persona?.access||[]).includes(n.k)).map(n=>(<div key={n.k} onClick={()=>go(n.k)} style={{display:"flex",alignItems:"center",gap:7,padding:"8px 14px",cursor:"pointer",background:active===n.k?"rgba(255,255,255,.1)":"transparent",borderLeft:active===n.k?"3px solid #fff":"3px solid transparent",color:active===n.k?"#fff":"rgba(255,255,255,.5)",fontSize:12,fontWeight:active===n.k?600:400}}><span style={{fontSize:12}}>{n.e}</span>{n.l}</div>))}</div><div style={{padding:10,borderTop:"1px solid rgba(255,255,255,.1)"}}><div style={S.flex}><div style={{width:26,height:26,borderRadius:"50%",background:"rgba(255,255,255,.12)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:700,color:"#fff"}}>YA</div><div style={{flex:1}}><div style={{fontSize:10,fontWeight:600,color:"#fff"}}>Yassir Q.</div><div style={{fontSize:8,color:"rgba(255,255,255,.4)"}}>{persona?.label}</div></div></div><button onClick={onLogout} style={{marginTop:6,background:"rgba(255,255,255,.08)",border:"1px solid rgba(255,255,255,.15)",borderRadius:5,padding:"4px 0",width:"100%",color:"rgba(255,255,255,.6)",fontSize:9}}>Sign Out</button></div></div>);
 
 // ══════════════════════════════════════════════════════════════
 // DASHBOARD
 // ══════════════════════════════════════════════════════════════
-const PgDash=({go,store})=>(<div><div style={S.g4}>{[{l:"Employees",v:EMP.length,d:"+12",c:T.teal,p:"team"},{l:"AI Agents",v:(store.agents||DEFAULT_AGENTS).length,d:"+2",c:T.violet,p:"agents"},{l:"Positions",v:JOBS.length,d:"-3",c:T.ocean,p:"marketplace"},{l:"Discussions",v:(store.ivs||[]).length||4,d:"+5",c:T.orange,p:"interviews"}].map(s=>(<div key={s.l} onClick={()=>go(s.p)} style={{...S.card,cursor:"pointer"}}><div style={S.between}><span style={{fontSize:18}}>{s.l==="AI Agents"?"🤖":s.l==="Employees"?"👥":s.l==="Positions"?"📋":"🎯"}</span><span style={{fontSize:10,fontWeight:700,color:s.d[0]==="+"?T.teal:T.red}}>{s.d}</span></div><div style={{fontSize:24,fontWeight:800,fontFamily:FH,marginTop:6}}>{s.v}</div><div style={{fontSize:11,color:T.inkMuted}}>{s.l}</div></div>))}</div><div style={S.g2}><div style={S.card}><h3 style={S.h3}>Pipeline</h3><div style={{marginTop:10}}>{["Scheduled","In Progress","Plan","Training","Done"].map((s,i)=>(<div key={s} style={{...S.flex,marginBottom:7}}><span style={{fontSize:10,color:T.inkMuted,width:100}}>{s}</span><div style={{flex:1}}><Bar pct={[25,45,60,35,80][i]} color={[T.ocean,T.orange,T.teal,T.violet,T.green][i]}/></div><span style={{fontSize:10,fontWeight:600,width:22,textAlign:"right"}}>{[12,18,24,9,31][i]}</span></div>))}</div></div><div style={S.card}><h3 style={S.h3}>AI Agents</h3><div style={{marginTop:10}}>{(store.agents||DEFAULT_AGENTS).slice(0,4).map(a=>(<div key={a.id} style={{...S.flex,padding:"5px 0",borderBottom:`1px solid ${T.border}`}}><span>🤖</span><div style={{flex:1}}><div style={{fontSize:11,fontWeight:600}}>{a.name}</div></div><Bd status={a.status}/></div>))}</div></div></div></div>);
+const PgDash=({go,store})=>(<div><div style={S.g4}>{[{l:"Employees",v:EMP.length,d:"+12",c:T.teal,p:"team"},{l:"AI Agents",v:(store.agents||DEFAULT_AGENTS).length,d:"+2",c:T.violet,p:"agents"},{l:"Positions",v:JOBS.length,d:"-3",c:T.ocean,p:"marketplace"},{l:"Interviews",v:(store.ivs||[]).length||4,d:"+5",c:T.orange,p:"interviews"}].map(s=>(<div key={s.l} onClick={()=>go(s.p)} style={{...S.card,cursor:"pointer"}}><div style={S.between}><span style={{fontSize:18}}>{s.l==="AI Agents"?"🤖":s.l==="Employees"?"👥":s.l==="Positions"?"📋":"🎯"}</span><span style={{fontSize:10,fontWeight:700,color:s.d[0]==="+"?T.teal:T.red}}>{s.d}</span></div><div style={{fontSize:24,fontWeight:800,fontFamily:FH,marginTop:6}}>{s.v}</div><div style={{fontSize:11,color:T.inkMuted}}>{s.l}</div></div>))}</div><div style={S.g2}><div style={S.card}><h3 style={S.h3}>Pipeline</h3><div style={{marginTop:10}}>{["Scheduled","In Progress","Plan","Training","Done"].map((s,i)=>(<div key={s} style={{...S.flex,marginBottom:7}}><span style={{fontSize:10,color:T.inkMuted,width:100}}>{s}</span><div style={{flex:1}}><Bar pct={[25,45,60,35,80][i]} color={[T.ocean,T.orange,T.teal,T.violet,T.green][i]}/></div><span style={{fontSize:10,fontWeight:600,width:22,textAlign:"right"}}>{[12,18,24,9,31][i]}</span></div>))}</div></div><div style={S.card}><h3 style={S.h3}>AI Agents</h3><div style={{marginTop:10}}>{(store.agents||DEFAULT_AGENTS).slice(0,4).map(a=>(<div key={a.id} style={{...S.flex,padding:"5px 0",borderBottom:`1px solid ${T.border}`}}><span>🤖</span><div style={{flex:1}}><div style={{fontSize:11,fontWeight:600}}>{a.name}</div></div><Bd status={a.status}/></div>))}</div></div></div></div>);
 
 // ══════════════════════════════════════════════════════════════
 // CHARTER — PREMIUM EXECUTIVE EXPERIENCE
@@ -620,13 +575,7 @@ const PgIV=({persona,store,setStore,setToast,go,setFocusSkill})=>{
   const startIV=iv=>{setAiv(iv);setAns(iv.ans||{});setFt({});setMa({});setCq(0);setV("iv");};
   const doSave=()=>{const a={...ans};Object.entries(ma).forEach(([k,vl])=>{a[k]=vl.join(", ");});Object.entries(ft).forEach(([k,vl])=>{if(vl)a[k]=vl;});setIvs(p=>p.map(i=>i.id===aiv.id?{...i,st:"In Progress",wf:Math.max(i.wf,1),ans:a}:i));setAiv(prev=>({...prev,ans:a}));setToast("✅ Interview saved");};
   
-  const genGap=(emp,a)=>{
-    const target=a[3]||a["3c"]||a[1]||`Senior ${emp.role}`;
-    const cur=a[4]?a[4].split(", "):emp.skills;
-    const targetRoleSkills=getRoleSkills(target);
-    const targetSkills=targetRoleSkills.filter(s=>!cur.includes(s)).slice(0,8);
-    return{targetRole:target,currentSkills:cur,targetSkills,gaps:targetSkills.map(s=>({s,c:Math.floor(Math.random()*2),r:3+Math.floor(Math.random()*3),p:["High","Medium","Low"][Math.floor(Math.random()*3)],status:"Not Started",empConfirmed:false,mgrValidated:false,assessment:null,certificationFile:null,trainingLink:`https://learn.axa.com/skills/${s.toLowerCase().replace(/\s+/g,'-')}`}))};
-  };
+  const genGap=(emp,a)=>{const target=a[3]||a["3c"]||`Senior ${emp.role}`;const cur=a[4]?a[4].split(", "):emp.skills;const des=a[6]?a[6].split(", "):SKILLS.slice(5,10);const targetSkills=[...des.filter(s=>!cur.includes(s)),"Strategic Thinking","Leadership"].slice(0,5);return{targetRole:target,currentSkills:cur,targetSkills,gaps:targetSkills.map(s=>({s,c:Math.floor(Math.random()*2),r:3+Math.floor(Math.random()*3),p:["High","Medium","Low"][Math.floor(Math.random()*3)],status:"Not Started",empConfirmed:false,mgrValidated:false,assessment:null}))};};
   
   const findMatchingJob=(targetRole)=>{const lower=targetRole.toLowerCase();return JOBS.find(j=>j.title.toLowerCase().includes(lower)||lower.includes(j.title.toLowerCase().split(" ")[0]))||JOBS[0];};
   
@@ -666,19 +615,10 @@ const PgIV=({persona,store,setStore,setToast,go,setFocusSkill})=>{
 
   // ─── JOB MATCHING ───
   const generateMatches=()=>{
-    const aspiration=(pv.ans?.[1]||"").toLowerCase();
-    const targetRole=(pv.gap?.targetRole||"").toLowerCase();
-    const aspirationKeywords=[aspiration,targetRole].filter(Boolean).join(" ").split(/[\s,/]+/).filter(w=>w.length>3);
-    const scored=JOBS.map(j=>{
-      let score=calcJobMatch(pv.emp,j,pv.gap);
-      // Aspiration boost: match Q1 + Q3 against job title
-      const title=j.title.toLowerCase();
-      const aspBoost=aspirationKeywords.filter(k=>title.includes(k)).length*15;
-      return{job:j,score:Math.min(100,score+aspBoost),aspirationMatch:aspBoost>0};
-    }).sort((a,b)=>b.score-a.score);
+    const scored=JOBS.map(j=>({job:j,score:calcJobMatch(pv.emp,j,pv.gap)})).sort((a,b)=>b.score-a.score);
     setIvs(p=>p.map(i=>i.id===pv.id?{...i,matches:scored,wf:5}:i));
     setPv(p=>({...p,matches:scored,wf:5}));
-    setToast(`✅ ${scored.length} jobs scored · prioritized by aspiration "${pv.ans?.[1]||targetRole}"`);
+    setToast("✅ Job matching complete · 8 jobs scored");
   };
   
   const applyToJob=(job)=>{
@@ -697,7 +637,7 @@ const PgIV=({persona,store,setStore,setToast,go,setFocusSkill})=>{
       <div style={{padding:"20px 24px",background:`linear-gradient(135deg,${T.violet},${T.axaBlue})`,color:"#fff",borderRadius:"10px 10px 0 0"}}>
         <div style={{fontSize:9,fontWeight:700,color:T.axaGold,letterSpacing:2,textTransform:"uppercase"}}>🤖 AI-Powered Skill Assessment</div>
         <h3 style={{fontFamily:FH,fontSize:20,fontWeight:700,marginTop:6}}>{assessSkill}</h3>
-        <div style={{fontSize:11,color:"rgba(255,255,255,.75)",marginTop:4}}>10 dynamic questions · Generated by AXA-AssessBot · Each assessment is unique · Manager validates final level</div>
+        <div style={{fontSize:11,color:"rgba(255,255,255,.75)",marginTop:4}}>3 dynamic questions · Generated by AXA-AssessBot · Each assessment is unique</div>
       </div>
       <div style={{padding:24}}>
         {assessQuestions.map((q,i)=>(<div key={i} style={{marginBottom:18,padding:14,background:T.bgMuted,borderRadius:8}}>
@@ -734,33 +674,21 @@ const PgIV=({persona,store,setStore,setToast,go,setFocusSkill})=>{
         <div style={{fontSize:11,color:T.inkSec,marginTop:4}}>Click <strong>"Assess Skill"</strong> on any skill below to launch a dynamic AI-powered questionnaire. Each assessment generates unique questions adapted to the skill type. Results update the skill level and require manager validation.</div>
       </div>
       
-      <h3 style={{...S.h3,marginTop:14,marginBottom:6}}>Skills · Validation · Certification · AI Assessment</h3>
+      <h3 style={{...S.h3,marginTop:14,marginBottom:6}}>Skills · Validation · AI Assessment</h3>
       {g.gaps.map((gg,i)=>(<div key={i} style={{...S.card,padding:14}}>
         <div style={S.between}>
           <div style={S.flex}>
             <span onClick={()=>{setFocusSkill(gg.s);go("careers");}} style={{fontSize:13,fontWeight:700,color:T.axaBlue,textDecoration:"underline",cursor:"pointer"}}>{gg.s}</span>
             <Bd status={gg.p}/><Bd status={gg.status}/>
-            {gg.certificationFile&&<Bd status="📄 Certified" custom={T.teal}/>}
             {gg.assessment&&<Bd status={`Score: ${gg.assessment.score}%`} custom={gg.assessment.score>=70?T.teal:T.orange}/>}
           </div>
-          <div style={S.flex}>
-            <button onClick={()=>startAssessment(gg.s)} disabled={!!gg.certificationFile} title={gg.certificationFile?"Already certified — assessment not needed":"Run AI assessment"} style={{...S.btn,...S.btnSm,background:gg.certificationFile?T.inkDim:T.violet,opacity:gg.certificationFile?.5:1}}>🤖 Assess Skill</button>
-          </div>
+          <button onClick={()=>startAssessment(gg.s)} style={{...S.btn,...S.btnSm,background:T.violet}}>🤖 Assess Skill</button>
         </div>
         
         <div style={{...S.flex,marginTop:8}}>
           <span style={{fontSize:10,color:T.inkMuted,width:60}}>Lv{gg.c} → Lv{gg.r}</span>
           <div style={{flex:1}}><Bar pct={(gg.c/gg.r)*100} color={gg.c>=gg.r?T.teal:gg.c>=gg.r/2?T.orange:T.red}/></div>
           <span style={{fontSize:10,fontWeight:600,color:T.inkMuted}}>{Math.round((gg.c/gg.r)*100)}%</span>
-        </div>
-
-        {/* Training + Certification zone */}
-        <div style={{...S.g2,marginTop:8,gap:8}}>
-          <a href={gg.trainingLink||`https://learn.axa.com/skills/${gg.s.toLowerCase().replace(/\s+/g,'-')}`} target="_blank" rel="noopener noreferrer" style={{...S.flex,padding:8,background:T.oceanBg,borderRadius:6,textDecoration:"none",color:T.ocean,fontSize:11,fontWeight:600}}>📚 Open Training Path →</a>
-          <label style={{...S.flex,padding:8,background:gg.certificationFile?T.tealBg:T.bgSoft,borderRadius:6,cursor:"pointer",fontSize:11,fontWeight:600,color:gg.certificationFile?T.teal:T.inkSec}}>
-            <input type="file" accept=".pdf,.png,.jpg,.jpeg" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){updateGap(gg.s,"certificationFile",f.name);updateGap(gg.s,"status","Validated");setToast(`✅ ${gg.s} cert uploaded: ${f.name}`);}}}/>
-            {gg.certificationFile?`✓ ${gg.certificationFile}`:"📎 Upload Certification (PDF/IMG)"}
-          </label>
         </div>
         
         <div style={{marginTop:8,padding:10,background:T.bgMuted,borderRadius:6}}>
@@ -793,7 +721,7 @@ const PgIV=({persona,store,setStore,setToast,go,setFocusSkill})=>{
       <div style={S.flex}>
         <button onClick={()=>setToast("✅ Gap analysis saved")} style={S.btn}>💾 Save Gap</button>
         <button onClick={()=>setV("plan")} style={{...S.btn,...S.btnG}}>→ Action Plan</button>
-        {(()=>{const allValidated=g.gaps.every(gg=>gg.mgrValidated&&gg.empConfirmed);const planFinalized=pv.plan?.status==="Finalized";const ready=allValidated&&planFinalized;return<button onClick={()=>{if(!ready){setToast("⚠️ Gate: validate all skills + finalize Action Plan first");return;}generateMatches();setV("matches");}} disabled={!ready} title={ready?"Find matching jobs":"Requires: ✓ Discussion done · ✓ Gap validated · ✓ Plan finalized"} style={{...S.btn,background:ready?T.axaGold:T.inkDim,color:ready?T.ink:"#fff",opacity:ready?1:.55}}>🎯 Match & Find Jobs {ready?"":"🔒"}</button>;})()}
+        <button onClick={()=>{generateMatches();setV("matches");}} style={{...S.btn,background:T.axaGold,color:T.ink}}>🎯 Generate Job Matches</button>
       </div>
     </div>);
   }
@@ -885,39 +813,23 @@ const PgIV=({persona,store,setStore,setToast,go,setFocusSkill})=>{
         <div style={{...S.flex,marginTop:14}}>
           <button onClick={doSavePlan} disabled={isLocked} style={{...S.btn,opacity:isLocked?.5:1}}>💾 Save</button>
           <button onClick={doFinalize} disabled={isLocked} style={{...S.btn,...S.btnG,opacity:isLocked?.5:1}}>{isLocked?"🔒 Finalized":"✅ Finalize"}</button>
-          {(()=>{const allValidated=pv.gap?.gaps?.every(gg=>gg.mgrValidated&&gg.empConfirmed);const ready=allValidated&&isLocked;return<button onClick={()=>{if(!ready){setToast("⚠️ Gate: Skills Gap must be fully validated AND Plan finalized");return;}generateMatches();setV("matches");}} disabled={!ready} title={ready?"Find matching jobs":"Requires: ✓ Gap validated + ✓ Plan finalized"} style={{...S.btn,background:ready?T.axaGold:T.inkDim,color:ready?T.ink:"#fff",opacity:ready?1:.55}}>🎯 Match & Find Jobs {ready?"":"🔒"}</button>;})()}
+          <button onClick={()=>{generateMatches();setV("matches");}} style={{...S.btn,background:T.axaGold,color:T.ink}}>🎯 Find Matching Jobs</button>
         </div>
       </div>
     </div>);
   }
 
-  if(v==="iv"&&aiv){
-    const IQ=buildIQ(aiv.emp,ans,allPaths);
-    const curQ=IQ[cq];const show=!curQ.on||ans[curQ.on]===curQ.val;
-    const allAvailable=[...SKILLS,...SOFT_SKILLS].filter((s,i,a)=>a.indexOf(s)===i);
-    const selM=ma[curQ.id]||[];
+  if(v==="iv"&&aiv){const curQ=IQ[cq];const show=!curQ.on||ans[curQ.on]===curQ.val;
     return(<div><button onClick={()=>setV("list")} style={{...S.btn,...S.btnO,...S.btnSm,marginBottom:8}}>← Back</button>
-    <div style={S.between}><div><h2 style={S.h1}>Career Discussion: {aiv.emp.name}</h2><p style={{fontSize:11,color:T.inkSec,marginTop:2}}>Long-term career conversation · Manager + Employee</p></div><button onClick={doSave} style={{...S.btn,...S.btnSm}}>💾 Save</button></div>
+    <div style={S.between}><div><h2 style={S.h1}>Interview: {aiv.emp.name}</h2></div><button onClick={doSave} style={{...S.btn,...S.btnSm}}>💾 Save</button></div>
     <div style={{margin:"6px 0"}}><Bar pct={(cq+1)/IQ.length*100}/><div style={{fontSize:10,color:T.inkMuted,marginTop:2}}>Q{cq+1}/{IQ.length}</div></div>
     {show?(<div style={{...S.card,padding:18,marginTop:6}}>
     <h3 style={{fontFamily:FH,fontSize:15,fontWeight:700,margin:"4px 0 10px"}}>{curQ.q}</h3>
-    {curQ.note&&<div style={{fontSize:10,color:T.orange,marginBottom:8}}>ℹ️ {curQ.note}</div>}
     {curQ.t==="s"&&curQ.o.map(opt=>(<div key={opt} onClick={()=>setAns(p=>({...p,[curQ.id]:opt}))} style={{padding:"8px 10px",margin:"3px 0",borderRadius:6,cursor:"pointer",border:`1.5px solid ${ans[curQ.id]===opt?T.teal:T.border}`,background:ans[curQ.id]===opt?T.tealBg:"transparent"}}><div style={S.flex}><div style={{width:14,height:14,borderRadius:"50%",border:`2px solid ${ans[curQ.id]===opt?T.teal:T.inkDim}`,display:"flex",alignItems:"center",justifyContent:"center"}}>{ans[curQ.id]===opt&&<div style={{width:6,height:6,borderRadius:"50%",background:T.teal}}/>}</div><span style={{fontSize:12}}>{opt}</span></div></div>))}
-    {curQ.t==="s"&&curQ.id===1&&ans[1]==="Other (free text)"&&<input style={{...S.input,marginTop:6}} placeholder="Describe your aspiration..." value={ft["1other"]||""} onChange={e=>setFt(p=>({...p,"1other":e.target.value}))}/>}
-    {curQ.t==="m"&&<>
-      <div style={{display:"flex",gap:8,marginBottom:6,fontSize:9,color:T.inkMuted,fontWeight:600,textTransform:"uppercase",letterSpacing:1}}>{curQ.id===4?<><span>Role skills</span><span style={{marginLeft:"auto"}}>Soft skills</span></>:curQ.id===6?<><span>Target-role skills</span><span style={{marginLeft:"auto"}}>Soft skills</span></>:null}</div>
-      <Chips options={curQ.o} selected={selM} onToggle={val=>setMa(p=>{const c=p[curQ.id]||[];return{...p,[curQ.id]:c.includes(val)?c.filter(x=>x!==val):[...c,val]};})} max={curQ.o.length}/>
-      {curQ.addable&&<div style={{marginTop:10,padding:10,background:T.bgMuted,borderRadius:6}}>
-        <div style={{fontSize:10,fontWeight:700,color:T.inkMuted,marginBottom:5}}>+ ADD CUSTOM SKILL</div>
-        <div style={{...S.flex,gap:6}}>
-          <select style={{...S.select,flex:1}} value={ft[`add${curQ.id}`]||""} onChange={e=>setFt(p=>({...p,[`add${curQ.id}`]:e.target.value}))}><option value="">Search all skills...</option>{allAvailable.filter(s=>!curQ.o.includes(s)&&!selM.includes(s)).slice(0,30).map(s=><option key={s}>{s}</option>)}</select>
-          <button onClick={()=>{const v=ft[`add${curQ.id}`];if(v){setMa(p=>{const c=p[curQ.id]||[];return{...p,[curQ.id]:[...c,v]};});setFt(p=>({...p,[`add${curQ.id}`]:""}));}}} style={{...S.btn,...S.btnSm}}>+ Add</button>
-        </div>
-      </div>}
-    </>}
+    {curQ.t==="m"&&<Chips options={curQ.o} selected={ma[curQ.id]||[]} onToggle={val=>setMa(p=>{const c=p[curQ.id]||[];return{...p,[curQ.id]:c.includes(val)?c.filter(x=>x!==val):[...c,val]};})} max={curQ.o.length}/>}
     {curQ.t==="x"&&<textarea style={{...S.input,minHeight:60}} value={ft[curQ.id]||""} onChange={e=>setFt(p=>({...p,[curQ.id]:e.target.value}))}/>}
     {curQ.t==="job"&&(<div>
-      <div style={{fontSize:11,fontWeight:600,marginBottom:5}}>Suggested target roles based on aspiration:</div>
+      <div style={{fontSize:11,fontWeight:600,marginBottom:5}}>Suggested:</div>
       <div style={{display:"flex",flexWrap:"wrap",gap:4,marginBottom:10}}>{jobSugg.map(j=>(<span key={j} onClick={()=>setAns(p=>({...p,[curQ.id]:j}))} style={{...S.badge,cursor:"pointer",padding:"5px 10px",fontSize:11,background:ans[curQ.id]===j?T.tealBg:T.bgSoft,color:ans[curQ.id]===j?T.teal:T.inkSec,border:`1.5px solid ${ans[curQ.id]===j?T.teal:T.border}`,borderRadius:6}}>{j}</span>))}</div>
       <input style={S.input} placeholder="Or custom..." value={ft["3c"]||""} onChange={e=>{setFt(p=>({...p,"3c":e.target.value}));if(e.target.value)setAns(p=>({...p,[curQ.id]:e.target.value}));}}/>
     </div>)}
@@ -925,10 +837,10 @@ const PgIV=({persona,store,setStore,setToast,go,setFocusSkill})=>{
     <div style={{...S.between,marginTop:8}}><button onClick={()=>setCq(p=>Math.max(0,p-1))} disabled={cq===0} style={{...S.btn,...S.btnO}}>←</button>{cq<IQ.length-1?<button onClick={()=>setCq(p=>p+1)} style={S.btn}>Next→</button>:<button onClick={complIV} style={{...S.btn,...S.btnG}}>✅ Complete</button>}</div></div>);
   }
 
-  const SchM=()=>showSch?(<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.3)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:999}} onClick={()=>setShowSch(false)}><div style={{...S.card,width:360,padding:22}} onClick={e=>e.stopPropagation()}><h3 style={S.h3}>Schedule Career Discussion</h3><div style={{fontSize:10,color:T.inkMuted,marginTop:3,marginBottom:8}}>Long-term career conversation between manager and employee</div><div style={{marginTop:10,marginBottom:8}}><label style={S.label}>Employee</label><select style={{...S.select,width:"100%"}} value={schEmp} onChange={e=>setSchEmp(e.target.value)}><option value="">Select...</option>{EMP.map(e=><option key={e.id} value={e.name}>{e.name}</option>)}</select></div><div style={{marginBottom:8}}><label style={S.label}>Date</label><input style={S.input} type="date" value={schDt} onChange={e=>setSchDt(e.target.value)}/></div><div style={S.flex}><button onClick={doSch} style={S.btn}>Schedule</button><button onClick={()=>setShowSch(false)} style={{...S.btn,...S.btnO}}>Cancel</button></div></div></div>):null;
+  const SchM=()=>showSch?(<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.3)",display:"flex",alignItems:"center",justifyContent:"center",zIndex:999}} onClick={()=>setShowSch(false)}><div style={{...S.card,width:360,padding:22}} onClick={e=>e.stopPropagation()}><h3 style={S.h3}>Schedule Interview</h3><div style={{marginTop:10,marginBottom:8}}><label style={S.label}>Employee</label><select style={{...S.select,width:"100%"}} value={schEmp} onChange={e=>setSchEmp(e.target.value)}><option value="">Select...</option>{EMP.map(e=><option key={e.id} value={e.name}>{e.name}</option>)}</select></div><div style={{marginBottom:8}}><label style={S.label}>Date</label><input style={S.input} type="date" value={schDt} onChange={e=>setSchDt(e.target.value)}/></div><div style={S.flex}><button onClick={doSch} style={S.btn}>Schedule</button><button onClick={()=>setShowSch(false)} style={{...S.btn,...S.btnO}}>Cancel</button></div></div></div>):null;
 
   return(<div><SchM/>
-    <div style={S.between}><div/><button onClick={()=>setShowSch(true)} style={S.btn}>+ Schedule Discussion</button></div>
+    <div style={S.between}><div/><button onClick={()=>setShowSch(true)} style={S.btn}>+ Schedule Interview</button></div>
     {ivs.map(iv=>(<div key={iv.id} style={S.card}>
       <div style={S.between}>
         <div style={S.flex}><div style={{width:30,height:30,borderRadius:"50%",background:T.axaBlue,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:700,color:"#fff"}}>{iv.emp.avatar}</div><div><div style={{fontSize:12,fontWeight:600}}>{iv.emp.name}</div><div style={{fontSize:10,color:T.inkMuted}}>{iv.emp.role}</div></div></div>
@@ -950,184 +862,18 @@ const PgIV=({persona,store,setStore,setToast,go,setFocusSkill})=>{
 // CAREERS
 // ══════════════════════════════════════════════════════════════
 const PgCareer=({focusSkill})=>{
-  const all=useMemo(()=>genPaths(),[]);
-  const[mode,setMode]=useState("list"); // list | graph
-  const[df,setDf]=useState("All");
-  const[q,setQ]=useState(focusSkill||"");
-  const[exp,setExp]=useState(null);
-  const[pg,setPg]=useState(0);
-  const[selNode,setSelNode]=useState(null);
-  const pp=12;
+  const all=useMemo(()=>genPaths(),[]);const[df,setDf]=useState("All");const[q,setQ]=useState(focusSkill||"");const[exp,setExp]=useState(null);const[pg,setPg]=useState(0);const pp=12;
   const fil=all.filter(p=>(df==="All"||p.domain===df)&&(!q||p.name.toLowerCase().includes(q.toLowerCase())||p.steps.some(s=>s.title.toLowerCase().includes(q.toLowerCase()))));
   const paged=fil.slice(pg*pp,(pg+1)*pp);const tp=Math.ceil(fil.length/pp);
-
-  // ── Build graph: nodes (roles) + edges (transitions: vertical, lateral, cross-family) ──
-  const graph=useMemo(()=>{
-    if(mode!=="graph")return{nodes:[],edges:[]};
-    const sourcePaths=df==="All"?all.slice(0,12):all.filter(p=>p.domain===df);
-    const nodeMap=new Map();
-    const edges=[];
-    sourcePaths.forEach((path,pi)=>{
-      path.steps.forEach((step,si)=>{
-        const key=step.title;
-        if(!nodeMap.has(key)){
-          nodeMap.set(key,{id:key,title:step.title,level:step.level,domain:path.domain,skills:step.skills,paths:new Set([path.id])});
-        } else {
-          nodeMap.get(key).paths.add(path.id);
-        }
-        // Vertical: this step → next step in same path
-        if(si<path.steps.length-1){
-          edges.push({from:step.title,to:path.steps[si+1].title,type:"vertical",domain:path.domain});
-        }
-      });
-    });
-    const nodes=[...nodeMap.values()];
-    // Cross-family bridges: nodes that exist in 2+ paths from different domains
-    const sameLevelByDomain={};
-    nodes.forEach(n=>{
-      const k=`L${n.level}`;
-      if(!sameLevelByDomain[k])sameLevelByDomain[k]=[];
-      sameLevelByDomain[k].push(n);
-    });
-    Object.values(sameLevelByDomain).forEach(group=>{
-      // Add lateral edges between roles at same level if their skills overlap
-      for(let i=0;i<group.length;i++){
-        for(let j=i+1;j<Math.min(group.length,i+3);j++){
-          const a=group[i],b=group[j];
-          if(a.domain!==b.domain){
-            const overlap=a.skills.filter(s=>b.skills.includes(s)).length;
-            if(overlap>=1){
-              edges.push({from:a.title,to:b.title,type:"cross-family",domain:`${a.domain}↔${b.domain}`});
-            }
-          }
-        }
-      }
-    });
-    return{nodes,edges};
-  },[mode,df,all]);
-
-  // ── Layout: position nodes by level (X) + domain (Y) ──
-  const layout=useMemo(()=>{
-    if(mode!=="graph"||!graph.nodes.length)return{};
-    const byLevel={};
-    graph.nodes.forEach(n=>{
-      if(!byLevel[n.level])byLevel[n.level]=[];
-      byLevel[n.level].push(n);
-    });
-    const positions={};
-    const colW=170,rowH=64,padL=40,padT=40;
-    Object.entries(byLevel).forEach(([lvl,nodes])=>{
-      const x=padL+(parseInt(lvl)-1)*colW;
-      nodes.forEach((n,i)=>{
-        positions[n.id]={x,y:padT+i*rowH,w:140,h:48};
-      });
-    });
-    return positions;
-  },[graph,mode]);
-
-  const nodeColor=(domain)=>{
-    const map={"Technology":T.ocean,"Data & AI":T.violet,"Product":T.teal,"HR & Talent":T.orange,"Strategy":T.axaBlue,"Operations":T.green,"Finance":"#9333EA","Risk & Compliance":T.red};
-    return map[domain]||T.inkMuted;
-  };
-
+  
   return(<div>
     {focusSkill&&<div style={{...S.card,background:T.orangeBg,borderColor:T.orange,padding:12}}>
       <div style={S.flex}><span>🎯</span><span style={{fontSize:11,fontWeight:700,color:T.orange}}>Focused on: {focusSkill}</span></div>
       <div style={{marginTop:6,fontSize:11}}>📚 {getLearning(focusSkill).train} · 🏅 {getLearning(focusSkill).cert} · 👤 {getLearning(focusSkill).mentor}</div>
     </div>}
-
-    <div style={{...S.card,padding:10}}>
-      <div style={{...S.flex,gap:6,flexWrap:"wrap"}}>
-        <input style={{...S.input,maxWidth:160}} placeholder="Search..." value={q} onChange={e=>setQ(e.target.value)}/>
-        <select style={S.select} value={df} onChange={e=>setDf(e.target.value)}>
-          <option value="All">All Domains</option>
-          {DOMAINS.map(d=><option key={d}>{d}</option>)}
-        </select>
-        <div style={{marginLeft:"auto",display:"flex",gap:4,padding:3,background:T.bgSoft,borderRadius:7}}>
-          <button onClick={()=>setMode("list")} style={{...S.btnSm,padding:"5px 12px",border:"none",borderRadius:5,fontSize:11,fontWeight:600,background:mode==="list"?T.bgCard:"transparent",color:mode==="list"?T.axaBlue:T.inkMuted,boxShadow:mode==="list"?"0 1px 3px rgba(0,0,0,.08)":"none"}}>📋 List</button>
-          <button onClick={()=>setMode("graph")} style={{...S.btnSm,padding:"5px 12px",border:"none",borderRadius:5,fontSize:11,fontWeight:600,background:mode==="graph"?T.bgCard:"transparent",color:mode==="graph"?T.axaBlue:T.inkMuted,boxShadow:mode==="graph"?"0 1px 3px rgba(0,0,0,.08)":"none"}}>🕸 Graph</button>
-        </div>
-      </div>
-    </div>
-
-    {mode==="list"&&<>
-      <div style={S.g3}>{paged.map(p=>(<div key={p.id} style={{...S.card,cursor:"pointer"}} onClick={()=>setExp(exp===p.id?null:p.id)}>
-        <div style={S.between}><Bd status={p.domain} custom={T.teal}/><Bd status={p.type} custom={T.violet}/></div>
-        <h4 style={{fontSize:11,fontWeight:700,margin:"5px 0"}}>{p.name}</h4>
-        {exp===p.id&&<div style={{padding:"6px 0"}}>{p.steps.map((s,i)=>(<div key={i} style={{...S.flex,padding:"3px 0"}}><span style={{fontSize:10,fontWeight:600,color:T.teal,width:24}}>L{s.level}</span><span style={{fontSize:11}}>{s.title}</span></div>))}</div>}
-      </div>))}</div>
-      <div style={{...S.flex,justifyContent:"center",marginTop:8}}>
-        <button disabled={pg===0} onClick={()=>setPg(p=>p-1)} style={{...S.btn,...S.btnSm,...S.btnO}}>←</button>
-        <span style={{fontSize:10}}>{pg+1}/{tp}</span>
-        <button disabled={pg>=tp-1} onClick={()=>setPg(p=>p+1)} style={{...S.btn,...S.btnSm,...S.btnO}}>→</button>
-      </div>
-    </>}
-
-    {mode==="graph"&&<div>
-      <div style={{...S.card,background:`linear-gradient(135deg,${T.axaBlue}06,${T.violet}06)`,padding:10,marginBottom:8}}>
-        <div style={{fontSize:11,color:T.inkSec,lineHeight:1.5}}>
-          <strong style={{color:T.axaBlue}}>Multi-link Career Graph</strong> · {graph.nodes.length} roles · {graph.edges.length} transitions
-          <br/>
-          <span style={{color:T.teal,fontWeight:600}}>━</span> Vertical (career progression in same family) ·
-          <span style={{color:T.orange,fontWeight:600,marginLeft:6}}>┄</span> Cross-family (lateral move with skill overlap)
-        </div>
-      </div>
-
-      <div style={{...S.card,padding:0,overflow:"auto",maxHeight:560}}>
-        {graph.nodes.length===0?<div style={{padding:30,textAlign:"center",color:T.inkMuted,fontSize:12}}>Select a domain to render the graph</div>:(()=>{
-          const maxX=Math.max(...Object.values(layout).map(p=>p.x+p.w))+30;
-          const maxY=Math.max(...Object.values(layout).map(p=>p.y+p.h))+30;
-          return<svg width={maxX} height={maxY} style={{display:"block",background:T.bgMuted}}>
-            <defs>
-              <marker id="arrV" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill={T.teal}/></marker>
-              <marker id="arrC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill={T.orange}/></marker>
-            </defs>
-            {/* Edges */}
-            {graph.edges.map((e,i)=>{
-              const a=layout[e.from],b=layout[e.to];
-              if(!a||!b)return null;
-              const x1=a.x+a.w,y1=a.y+a.h/2,x2=b.x,y2=b.y+b.h/2;
-              const isVert=e.type==="vertical";
-              return<path key={i} d={`M${x1} ${y1} C${x1+30} ${y1}, ${x2-30} ${y2}, ${x2} ${y2}`} stroke={isVert?T.teal:T.orange} strokeWidth={isVert?1.5:1} strokeDasharray={isVert?"":"4 3"} fill="none" markerEnd={`url(#${isVert?"arrV":"arrC"})`} opacity={selNode&&(selNode===e.from||selNode===e.to)?1:.45}/>;
-            })}
-            {/* Nodes */}
-            {graph.nodes.map(n=>{
-              const p=layout[n.id];if(!p)return null;
-              const c=nodeColor(n.domain);
-              const isSel=selNode===n.id;
-              return<g key={n.id} style={{cursor:"pointer"}} onClick={()=>setSelNode(selNode===n.id?null:n.id)}>
-                <rect x={p.x} y={p.y} width={p.w} height={p.h} rx={6} fill={isSel?c:"#fff"} stroke={c} strokeWidth={isSel?2:1.5}/>
-                <text x={p.x+8} y={p.y+18} fontSize="9" fill={isSel?"#fff":T.inkMuted} fontWeight="700">L{n.level} · {n.domain}</text>
-                <text x={p.x+8} y={p.y+34} fontSize="11" fill={isSel?"#fff":T.ink} fontWeight="600">{n.title.length>18?n.title.slice(0,17)+"…":n.title}</text>
-                {n.paths.size>1&&<circle cx={p.x+p.w-10} cy={p.y+10} r={6} fill={T.orange}><title>{n.paths.size} paths</title></circle>}
-              </g>;
-            })}
-          </svg>;
-        })()}
-      </div>
-
-      {selNode&&(()=>{const node=graph.nodes.find(n=>n.id===selNode);if(!node)return null;
-        const outgoing=graph.edges.filter(e=>e.from===selNode);
-        return<div style={{...S.card,marginTop:10,borderLeft:`4px solid ${nodeColor(node.domain)}`}}>
-          <div style={S.between}>
-            <div><h3 style={S.h3}>{node.title}</h3><div style={{fontSize:11,color:T.inkSec,marginTop:2}}>Level {node.level} · {node.domain}</div></div>
-            <button onClick={()=>setSelNode(null)} style={{...S.btn,...S.btnSm,...S.btnO}}>✕ Close</button>
-          </div>
-          <div style={{marginTop:10}}>
-            <div style={S.label}>Required Skills</div>
-            <div style={{display:"flex",flexWrap:"wrap",gap:3,marginTop:4}}>{node.skills.map(s=><span key={s} style={S.tag}>{s}</span>)}</div>
-          </div>
-          <div style={{marginTop:10}}>
-            <div style={S.label}>Possible Next Transitions ({outgoing.length})</div>
-            {outgoing.length===0?<div style={{fontSize:11,color:T.inkMuted,marginTop:4}}>End of path · consider lateral or cross-entity move</div>:<div style={{marginTop:4}}>{outgoing.map((e,i)=>(<div key={i} style={{...S.flex,padding:"6px 8px",background:T.bgMuted,borderRadius:6,marginBottom:4,cursor:"pointer"}} onClick={()=>setSelNode(e.to)}>
-              <Bd status={e.type==="vertical"?"Vertical":"Cross-family"} custom={e.type==="vertical"?T.teal:T.orange}/>
-              <span style={{fontSize:11,fontWeight:600}}>→ {e.to}</span>
-            </div>))}</div>}
-          </div>
-          <div style={{marginTop:8,fontSize:10,color:T.inkMuted}}>This role appears in {node.paths.size} career path{node.paths.size>1?"s":""}</div>
-        </div>;
-      })()}
-    </div>}
+    <div style={{...S.card,padding:10}}><div style={{...S.flex,gap:6}}><input style={{...S.input,maxWidth:160}} placeholder="Search..." value={q} onChange={e=>setQ(e.target.value)}/><select style={S.select} value={df} onChange={e=>setDf(e.target.value)}><option value="All">All</option>{DOMAINS.map(d=><option key={d}>{d}</option>)}</select></div></div>
+    <div style={S.g3}>{paged.map(p=>(<div key={p.id} style={{...S.card,cursor:"pointer"}} onClick={()=>setExp(exp===p.id?null:p.id)}><div style={S.between}><Bd status={p.domain} custom={T.teal}/><Bd status={p.type} custom={T.violet}/></div><h4 style={{fontSize:11,fontWeight:700,margin:"5px 0"}}>{p.name}</h4>{exp===p.id&&<div style={{padding:"6px 0"}}>{p.steps.map((s,i)=>(<div key={i} style={{...S.flex,padding:"3px 0"}}><span style={{fontSize:10,fontWeight:600,color:T.teal,width:24}}>L{s.level}</span><span style={{fontSize:11}}>{s.title}</span></div>))}</div>}</div>))}</div>
+    <div style={{...S.flex,justifyContent:"center",marginTop:8}}><button disabled={pg===0} onClick={()=>setPg(p=>p-1)} style={{...S.btn,...S.btnSm,...S.btnO}}>←</button><span style={{fontSize:10}}>{pg+1}/{tp}</span><button disabled={pg>=tp-1} onClick={()=>setPg(p=>p+1)} style={{...S.btn,...S.btnSm,...S.btnO}}>→</button></div>
   </div>);
 };
 
@@ -1201,140 +947,14 @@ const PgAgents=({store,setStore,setToast})=>{
 // ══════════════════════════════════════════════════════════════
 // REPORTS
 // ══════════════════════════════════════════════════════════════
-const PgRep=({store})=>{
-  const agents=store.agents||DEFAULT_AGENTS;
-  const apps=store.applications||[];
-  const interests=store.interests||[];
-  const ivs=store.ivs||[];
-  const[domain,setDomain]=useState("executive");
-  
-  // Computed executive KPIs
-  const totalEmp=EMP.length;
-  const inMobility=EMP.filter(e=>e.mobility).length;
-  const mobilityRate=Math.round(inMobility/totalEmp*100);
-  const ivsCompleted=ivs.filter(i=>i.st==="Completed"||i.st==="Action Plan"||i.wf>=3).length;
-  const completionRate=ivs.length?Math.round(ivsCompleted/ivs.length*100):0;
-  const finalizedPlans=ivs.filter(i=>i.plan?.status==="Finalized").length;
-  const aspFulfilled=apps.length;
-  
-  // NEW PREMIUM KPIs
-  const mobilityReadinessIndex=Math.round((mobilityRate*0.4+completionRate*0.4+(apps.length?60:30)*0.2));
-  const talentReleaseScore=72; // Manager willingness to release talent
-  const careerStagnationRisk=Math.round(EMP.filter(e=>e.yrs>=5&&!e.mobility).length/totalEmp*100);
-  const visibilityScore=85; // Internal Opportunity Visibility
-  const skillObsolescenceRisk=18; // % of skills at risk of becoming obsolete
-  const leadershipPipeline=Math.round(EMP.filter(e=>e.level==="Senior"||e.level==="Lead").length/totalEmp*100);
-  const crossEntityIndex=42; // % of mobility crossing entities
-  const mgrSupportScore=78; // Manager mobility support
-  
-  const domains=[
-    {k:"executive",l:"📊 Executive",c:T.axaBlue},
-    {k:"mobility",l:"🚀 Mobility",c:T.teal},
-    {k:"talent",l:"🎯 Talent Mgmt",c:T.ocean},
-    {k:"skills",l:"💡 Skills",c:T.orange},
-    {k:"discussions",l:"💬 Discussions",c:T.violet},
-    {k:"learning",l:"📚 L&D",c:"#9333EA"},
-    {k:"ai",l:"🤖 AI Workforce",c:T.violet},
-  ];
-  
-  const KPICard=({title,value,unit,trend,desc,color,big})=>(<div style={{...S.card,padding:big?20:14,borderLeft:`4px solid ${color}`}}>
-    <div style={{fontSize:9,color:T.inkMuted,textTransform:"uppercase",letterSpacing:1,fontWeight:700}}>{title}</div>
-    <div style={{fontSize:big?34:24,fontWeight:800,fontFamily:FH,color,margin:"6px 0 2px"}}>{value}<span style={{fontSize:big?18:14,marginLeft:3,opacity:.6}}>{unit}</span></div>
-    {trend&&<div style={{fontSize:10,color:trend[0]==="+"?T.teal:T.red,fontWeight:600}}>{trend} vs Q1</div>}
-    {desc&&<div style={{fontSize:10,color:T.inkSec,marginTop:5,lineHeight:1.4}}>{desc}</div>}
-  </div>);
-  
-  return(<div>
-    <p style={{fontSize:11,color:T.inkMuted,marginBottom:10}}>Strategic mobility intelligence · Updated daily · Filter by reporting domain</p>
-    <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:14}}>
-      {domains.map(d=>(<button key={d.k} onClick={()=>setDomain(d.k)} style={{...S.btn,...S.btnSm,background:domain===d.k?d.c:T.bgSoft,color:domain===d.k?"#fff":T.inkSec,border:`1.5px solid ${domain===d.k?d.c:T.border}`}}>{d.l}</button>))}
-    </div>
-    
-    {domain==="executive"&&<div>
-      <div style={{...S.card,background:`linear-gradient(135deg,${T.axaBlue},${T.violet})`,color:"#fff",padding:20}}>
-        <div style={{fontSize:10,fontWeight:700,letterSpacing:2,opacity:.8,textTransform:"uppercase"}}>★ Executive Dashboard · Strategic KPIs ★</div>
-        <h2 style={{fontFamily:FH,fontSize:24,fontWeight:700,marginTop:8}}>Mobility Readiness Index: {mobilityReadinessIndex}/100</h2>
-        <div style={{fontSize:12,opacity:.85,marginTop:4}}>Composite score: mobility rate · discussion completion · job applications</div>
-        <div style={{height:8,background:"rgba(255,255,255,.2)",borderRadius:4,marginTop:10,overflow:"hidden"}}><div style={{height:"100%",width:`${mobilityReadinessIndex}%`,background:"#FFD600",transition:"width .8s"}}/></div>
-      </div>
-      <div style={{...S.g3,marginTop:12}}>
-        <KPICard title="Talent Release Score" value={talentReleaseScore} unit="/100" trend="+5" desc="Manager willingness to release internal talent" color={T.teal}/>
-        <KPICard title="Career Stagnation Risk" value={careerStagnationRisk} unit="%" trend="-3" desc="Employees 5+ years without mobility intent" color={T.red}/>
-        <KPICard title="Internal Opportunity Visibility" value={visibilityScore} unit="/100" trend="+12" desc="How visible internal jobs are to employees" color={T.ocean}/>
-        <KPICard title="Skill Obsolescence Risk" value={skillObsolescenceRisk} unit="%" trend="-2" desc="Skills at risk of becoming obsolete in 24mo" color={T.orange}/>
-        <KPICard title="Future Leadership Pipeline" value={leadershipPipeline} unit="%" trend="+4" desc="Senior+Lead bench strength for succession" color={T.violet}/>
-        <KPICard title="Cross-Entity Mobility Index" value={crossEntityIndex} unit="%" trend="+8" desc="Mobility crossing entities/countries" color={T.teal}/>
-        <KPICard title="Manager Mobility Support" value={mgrSupportScore} unit="/100" trend="+6" desc="Managers actively supporting team mobility" color={T.ocean}/>
-        <KPICard title="Aspiration Fulfillment" value={Math.round(apps.length/Math.max(1,ivs.length)*100)} unit="%" trend="—" desc="Discussions translated to job applications" color={T.violet}/>
-        <KPICard title="Internal vs External Hiring" value="68/32" unit="%" trend="+4" desc="Higher internal ratio = healthier mobility" color={T.teal}/>
-      </div>
-    </div>}
-    
-    {domain==="mobility"&&<div>
-      <div style={S.g4}>
-        <KPICard title="Internal Mobility Rate" value={mobilityRate} unit="%" color={T.teal} desc="Target: 30%"/>
-        <KPICard title="Time to Fill (Internal)" value={18} unit="days" color={T.green} desc="vs 65d external"/>
-        <KPICard title="Mobility Blocked" value={3} unit="cases" color={T.red} desc="Awaiting HR mediation"/>
-        <KPICard title="Release SLA Compliance" value={84} unit="%" color={T.ocean} desc="Within 8-week SLA"/>
-      </div>
-      <div style={S.g2}>
-        <div style={S.card}><h3 style={{...S.h3,marginBottom:8}}>Mobility by Entity</h3>{["AXA France","AXA Group Ops","AXA UK","AXA Germany","AXA Belgium"].map((e,i)=>(<div key={e} style={{...S.flex,marginBottom:6}}><span style={{fontSize:10,width:120}}>{e}</span><div style={{flex:1}}><Bar pct={[28,35,21,18,15][i]} color={T.teal}/></div><span style={{fontSize:10,fontWeight:600,width:30,textAlign:"right"}}>{[28,35,21,18,15][i]}%</span></div>))}</div>
-        <div style={S.card}><h3 style={{...S.h3,marginBottom:8}}>Mobility by Country</h3>{["France","UK","Germany","Belgium","Spain"].map((c,i)=>(<div key={c} style={{...S.flex,marginBottom:6}}><span style={{fontSize:10,width:80}}>{c}</span><div style={{flex:1}}><Bar pct={[32,24,19,16,12][i]} color={T.ocean}/></div><span style={{fontSize:10,fontWeight:600,width:30,textAlign:"right"}}>{[32,24,19,16,12][i]}%</span></div>))}</div>
-      </div>
-    </div>}
-    
-    {domain==="talent"&&<div>
-      <div style={S.g4}>
-        <KPICard title="Talent Hoarding Detection" value={5} unit="mgrs" color={T.red} desc="Managers blocking moves"/>
-        <KPICard title="Promotion Velocity" value="2.3" unit="yrs" color={T.teal} desc="Avg time to promotion"/>
-        <KPICard title="Retention After Mobility" value={91} unit="%" color={T.green} desc="vs 73% no-mobility"/>
-        <KPICard title="Internal/External Hires" value="68/32" unit="%" color={T.ocean} desc="Internal first ratio"/>
-      </div>
-      <div style={S.card}><h3 style={{...S.h3,marginBottom:8}}>Talent Hoarding Watchlist</h3>{[{m:"Manager A",t:"DevOps",blocked:3},{m:"Manager B",t:"Data Analytics",blocked:2},{m:"Manager C",t:"Underwriting",blocked:2}].map((h,i)=>(<div key={i} style={{...S.flex,padding:"8px 0",borderBottom:`1px solid ${T.border}`}}><div style={{flex:1}}><div style={{fontSize:12,fontWeight:600}}>{h.m}</div><div style={{fontSize:10,color:T.inkMuted}}>{h.t} team</div></div><Bd status={`${h.blocked} blocked`} custom={T.red}/></div>))}</div>
-    </div>}
-    
-    {domain==="skills"&&<div>
-      <div style={S.g4}>
-        <KPICard title="Enterprise Skills Coverage" value={72} unit="%" color={T.ocean} desc="Critical skills coverage"/>
-        <KPICard title="Critical Skill Shortage" value={4} unit="skills" color={T.red} desc="GenAI · Cloud · Cyber · Agentic AI"/>
-        <KPICard title="Certification Completion" value={61} unit="%" color={T.teal} desc="vs target 75%"/>
-        <KPICard title="Reskilling Velocity" value="34" unit="d" color={T.green} desc="Avg days per skill"/>
-      </div>
-      <div style={S.card}><h3 style={{...S.h3,marginBottom:8}}>Critical Skill Gaps (Enterprise)</h3>{[{s:"Agentic AI",sh:"Severe",cov:18},{s:"GenAI / LLM Fine-tuning",sh:"High",cov:24},{s:"Cloud Architecture",sh:"Medium",cov:54},{s:"Cybersecurity",sh:"Medium",cov:62},{s:"Data Governance",sh:"Low",cov:71}].map((g,i)=>(<div key={i} style={{...S.flex,padding:"8px 0",borderBottom:`1px solid ${T.border}`}}><span style={{fontSize:11,fontWeight:600,width:200}}>{g.s}</span><div style={{flex:1}}><Bar pct={g.cov} color={g.cov<30?T.red:g.cov<60?T.orange:T.teal}/></div><span style={{fontSize:10,width:30,textAlign:"right",fontWeight:600}}>{g.cov}%</span><Bd status={g.sh} custom={g.sh==="Severe"?T.red:g.sh==="High"?T.orange:g.sh==="Medium"?T.ocean:T.teal}/></div>))}</div>
-    </div>}
-    
-    {domain==="discussions"&&<div>
-      <div style={S.g4}>
-        <KPICard title="Completion Rate" value={completionRate} unit="%" color={T.teal} desc={`${ivsCompleted}/${ivs.length||4} done`}/>
-        <KPICard title="Finalized Action Plans" value={finalizedPlans} unit="" color={T.ocean} desc="Locked + ready"/>
-        <KPICard title="Aspiration Fulfillment" value={apps.length} unit="apps" color={T.violet} desc="Aspirations → Job applications"/>
-        <KPICard title="Avg Discussion Length" value="42" unit="min" color={T.orange} desc="Manager + Employee time"/>
-      </div>
-    </div>}
-    
-    {domain==="learning"&&<div>
-      <div style={S.g4}>
-        <KPICard title="Training Completion" value={68} unit="%" color={T.teal} desc="By domain avg"/>
-        <KPICard title="Cert Conversion Rate" value={52} unit="%" color={T.ocean} desc="Training → Cert"/>
-        <KPICard title="Mentoring Engagement" value={43} unit="%" color={T.violet} desc="Active mentor-mentee pairs"/>
-        <KPICard title="L&D Budget Used" value={62} unit="%" color={T.orange} desc="Of annual envelope"/>
-      </div>
-      <div style={S.card}><h3 style={{...S.h3,marginBottom:8}}>Training Completion by Domain</h3>{DOMAINS.slice(0,5).map((d,i)=>(<div key={d} style={{...S.flex,marginBottom:6}}><span style={{fontSize:10,width:120}}>{d}</span><div style={{flex:1}}><Bar pct={[78,82,45,58,73][i]}/></div><span style={{fontSize:10,fontWeight:600,width:28,textAlign:"right"}}>{[78,82,45,58,73][i]}%</span></div>))}</div>
-    </div>}
-    
-    {domain==="ai"&&<div>
-      <div style={S.g4}>
-        <KPICard title="AI Agent Utilization" value={Math.round(agents.filter(a=>a.status==="active").length/agents.length*100)} unit="%" color={T.violet} desc={`${agents.filter(a=>a.status==="active").length}/${agents.length} active`}/>
-        <KPICard title="AI vs Human Tasks" value="38/62" unit="%" color={T.ocean} desc="AI augmentation ratio"/>
-        <KPICard title="Total AI Tasks Done" value={agents.reduce((s,a)=>s+a.tasks,0)} unit="" color={T.teal} desc="Across all agents"/>
-        <KPICard title="Avg Agent Accuracy" value={Math.round(agents.reduce((s,a)=>s+a.accuracy,0)/agents.length)} unit="%" color={T.violet} desc="Validated outcomes"/>
-      </div>
-      <div style={S.card}><h3 style={{...S.h3,marginBottom:8}}>AI Agent Performance</h3>{agents.map(a=>(<div key={a.id} style={{...S.flex,marginBottom:6}}><span style={{fontSize:10,width:140}}>{a.name}</span><div style={{flex:1}}><Bar pct={a.accuracy} color={T.violet}/></div><span style={{fontSize:10,fontWeight:700,color:T.violet,width:28,textAlign:"right"}}>{a.accuracy}%</span><span style={{fontSize:9,color:T.inkMuted,marginLeft:8,width:60,textAlign:"right"}}>{a.tasks} tasks</span></div>))}</div>
-    </div>}
-    
-    {apps.length>0&&<div style={{...S.card,marginTop:12}}><h3 style={{...S.h3,marginBottom:6}}>Recent Applications ({apps.length})</h3>{apps.slice(-5).map((a,i)=>(<div key={i} style={{...S.flex,padding:"6px 0",borderBottom:`1px solid ${T.border}`}}><div style={{flex:1,fontSize:11}}><strong>{a.empName}</strong> → {a.jobTitle}</div><div style={{fontSize:10,color:T.inkMuted}}>{a.date}</div><Bd status={a.status}/></div>))}</div>}
-  </div>);
-};
+const PgRep=({store})=>{const agents=store.agents||DEFAULT_AGENTS;const apps=store.applications||[];return(<div>
+  <div style={S.g4}>{[{l:"Mobility",v:"23%",p:77,c:T.teal},{l:"Fill",v:"18d",p:90,c:T.green},{l:"Skills",v:"72%",p:85,c:T.ocean},{l:"Apps",v:apps.length||0,p:60,c:T.violet}].map(m=>(<div key={m.l} style={S.card}><div style={{fontSize:9,color:T.inkMuted,textTransform:"uppercase",fontWeight:600}}>{m.l}</div><div style={{fontSize:22,fontWeight:800,fontFamily:FH,color:m.c,margin:"3px 0"}}>{m.v}</div><Bar pct={m.p} color={m.c}/></div>))}</div>
+  <div style={S.g2}>
+    <div style={S.card}><h3 style={{...S.h3,marginBottom:6}}>By Domain</h3>{DOMAINS.slice(0,5).map((d,i)=>(<div key={d} style={{...S.flex,marginBottom:5}}><span style={{fontSize:10,width:90}}>{d}</span><div style={{flex:1}}><Bar pct={[65,82,45,58,73][i]}/></div><span style={{fontSize:10,fontWeight:600,width:24,textAlign:"right"}}>{[65,82,45,58,73][i]}%</span></div>))}</div>
+    <div style={S.card}><h3 style={{...S.h3,marginBottom:6}}>AI Agents</h3>{agents.map(a=>(<div key={a.id} style={{...S.flex,marginBottom:5}}><span style={{fontSize:10,width:100}}>{a.name}</span><div style={{flex:1}}><Bar pct={a.accuracy} color={T.violet}/></div><span style={{fontSize:10,fontWeight:700,color:T.violet,width:28,textAlign:"right"}}>{a.accuracy}%</span></div>))}</div>
+  </div>
+  {apps.length>0&&<div style={S.card}><h3 style={{...S.h3,marginBottom:6}}>Recent Applications ({apps.length})</h3>{apps.slice(-5).map((a,i)=>(<div key={i} style={{...S.flex,padding:"6px 0",borderBottom:`1px solid ${T.border}`}}><div style={{flex:1,fontSize:11}}><strong>{a.empName}</strong> → {a.jobTitle}</div><div style={{fontSize:10,color:T.inkMuted}}>{a.date}</div><Bd status={a.status}/></div>))}</div>}
+</div>);};
 
 // ══════════════════════════════════════════════════════════════
 // MAIN
@@ -1348,7 +968,7 @@ export default function App(){
   
   if(!auth)return<Auth onLogin={p=>{setPersona(p);setAuth(true);}}/>;
   
-  const titles={dashboard:"Dashboard",charter:"Smart Mobility Charter",marketplace:"Talent Marketplace",team:"My Team",interviews:"Career Discussions",careers:"Career Paths",refs:"Data & Referentials",agents:"AI Agents Management",reports:"Reports & Executive KPIs"};
+  const titles={dashboard:"Dashboard",charter:"Smart Mobility Charter",marketplace:"Talent Marketplace",team:"My Team",interviews:"Career Interviews",careers:"Career Paths",refs:"Data & Referentials",agents:"AI Agents Management",reports:"Reports"};
   const pages={dashboard:<PgDash go={setPg} store={store}/>,charter:<PgCharter/>,marketplace:<PgMarket persona={persona} store={store} setStore={setStore} setToast={setToast} go={setPg}/>,team:<PgTeam store={store}/>,interviews:<PgIV persona={persona} store={store} setStore={setStore} setToast={setToast} go={setPg} setFocusSkill={setFocusSkill}/>,careers:<PgCareer focusSkill={focusSkill}/>,refs:<PgRefs store={store} setStore={setStore} setToast={setToast}/>,agents:<PgAgents store={store} setStore={setStore} setToast={setToast}/>,reports:<PgRep store={store}/>};
   
   return(<div style={{fontFamily:FT,background:T.bg,color:T.ink,minHeight:"100vh",display:"flex",overflow:"hidden",height:"100vh",fontSize:12}}>
